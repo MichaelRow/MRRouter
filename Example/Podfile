@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'URLRouter_Example' do
+  pod 'URLRouter', :path => '../'
+
+  target 'URLRouter_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
