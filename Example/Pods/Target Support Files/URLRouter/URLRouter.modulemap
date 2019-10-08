@@ -1,0 +1,6 @@
+framework module URLRouter {
+  umbrella header "URLRouter-umbrella.h"
+
+  export *
+  module * { export * }
+}
