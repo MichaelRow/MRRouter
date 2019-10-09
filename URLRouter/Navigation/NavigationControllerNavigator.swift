@@ -29,7 +29,7 @@ open class NavigationControllerNavigator: Navigator {
         guard context.viewControllerType != nil,
               rootNavigationController != nil
         else {
-            context.completion?()
+            context.completion?(.essitialCheckFail)
             return
         }
         
@@ -45,7 +45,7 @@ open class NavigationControllerNavigator: Navigator {
     public func push(context: RoutingContext) {
         
         if let canNavigate = topMost?.routable?.viewControllerCanNavigate(by: self, context: context), !canNavigate {
-            context.completion?()
+            context.completion?(.rejectNavigate)
             return
         }
         
@@ -53,34 +53,35 @@ open class NavigationControllerNavigator: Navigator {
             // 先找到合适的导航栏控制器
             guard let navigationController = context.option.contains(.useTopMostNavigation) ? self.topMostNavigation : self.rootNavigationController
             else {
-                context.completion?()
+                context.completion?(.noNavigationController)
                 return
             }
             
             self.dismissModal(for: navigationController, animated: !context.option.contains(.withoutDismissalAnimation)) {
                 // 根据优先级处理出入页面栈逻辑
                 let stackHandleResult = self.resolveStackType(for: navigationController, context: context)
+                var error: RouterError? = nil
                 
                 self.delegate?.navigator(self, willPush: stackHandleResult.stackType)
                 
                 switch stackHandleResult.stackType {
                 case .push:
-                    self.handlePush(context, navigationController: navigationController)
+                    error = self.handlePush(context, navigationController: navigationController)
                 case .refreshParameters:
-                    self.handleRefreshParameter(context, navigationController: navigationController)
+                    error = self.handleRefreshParameter(context, navigationController: navigationController)
                 case .replace:
-                    self.handleReplace(context, navigationController: navigationController)
+                    error = self.handleReplace(context, navigationController: navigationController)
                 case .popThenInsert:
-                    self.handlePopThenInsert(context, navigationController: navigationController, popToIndex: stackHandleResult.popToIndex)
+                    error = self.handlePopThenInsert(context, navigationController: navigationController, popToIndex: stackHandleResult.popToIndex)
                 case .popThenReplace:
-                    self.handlePopThenReplace(context, navigationController: navigationController, popToIndex: stackHandleResult.popToIndex)
+                    error = self.handlePopThenReplace(context, navigationController: navigationController, popToIndex: stackHandleResult.popToIndex)
                 case .popThenRefreshParameters:
-                    self.handlePopThenRefreshParameters(context, navigationController: navigationController, popToIndex: stackHandleResult.popToIndex)
+                    error = self.handlePopThenRefreshParameters(context, navigationController: navigationController, popToIndex: stackHandleResult.popToIndex)
                 case .doNothing:
-                    break
+                    error = .noAction
                 }
                 
-                context.completion?()
+                context.completion?(error)
                 
                 self.delegate?.navigator(self, didPush: stackHandleResult.stackType)
             }
@@ -89,53 +90,61 @@ open class NavigationControllerNavigator: Navigator {
     
     //MARK: - Push Handling
     
-    private func handlePush(_ context: RoutingContext, navigationController: UINavigationController) {
-        guard let viewController = instantiateViewController(context) else { return }
+    @discardableResult private func handlePush(_ context: RoutingContext, navigationController: UINavigationController) -> RouterError? {
+        guard let viewController = instantiateViewController(context) else { return .instantiateVCFailed }
         navigationController.pushViewController(viewController, animated: !context.option.contains(.withoutAnimation))
+        return nil
     }
     
-    private func handleRefreshParameter(_ context: RoutingContext, navigationController: UINavigationController) {
-        guard let targetVC = navigationController.topViewController else { return }
+    @discardableResult private func handleRefreshParameter(_ context: RoutingContext, navigationController: UINavigationController) -> RouterError? {
+        guard let targetVC = navigationController.topViewController else { return .getTopMostVCFailed }
         targetVC.routable?.viewControllerWillUpdateParameters(by: self, context: context)
         targetVC.routable?.parameters = context.params
         targetVC.routable?.viewControllerDidUpdateParameters(by: self, context: context)
+        return nil
     }
     
-    private func handleReplace(_ context: RoutingContext, navigationController: UINavigationController) {
-        guard let viewController = instantiateViewController(context) else { return }
+    @discardableResult private func handleReplace(_ context: RoutingContext, navigationController: UINavigationController) -> RouterError? {
+        guard let viewController = instantiateViewController(context) else { return .instantiateVCFailed }
         var stackVCs = navigationController.viewControllers
         stackVCs.removeLast()
         stackVCs.append(viewController)
         navigationController.setViewControllers(stackVCs, animated: context.option.contains(.popReplaceAnimation))
+        return nil
     }
     
-    private func handlePopThenInsert(_ context: RoutingContext, navigationController: UINavigationController, popToIndex index: Int?) {
+    @discardableResult private func handlePopThenInsert(_ context: RoutingContext, navigationController: UINavigationController, popToIndex index: Int?) -> RouterError? {
         guard let index = index,
               let viewController = instantiateViewController(context)
-        else { return }
+        else { return .instantiateVCFailed }
+        
         var stackVCs = navigationController.viewControllers[0...index]
         stackVCs.append(viewController)
         navigationController.setViewControllers(Array(stackVCs), animated: context.option.contains(.popReplaceAnimation))
+        return nil
     }
     
-    private func handlePopThenReplace(_ context: RoutingContext, navigationController: UINavigationController, popToIndex index: Int?) {
+    @discardableResult private func handlePopThenReplace(_ context: RoutingContext, navigationController: UINavigationController, popToIndex index: Int?) -> RouterError? {
         guard let index = index,
               let viewController = instantiateViewController(context)
-        else { return }
+        else { return .instantiateVCFailed }
+        
         var stackVCs = navigationController.viewControllers[0...index]
         stackVCs.removeLast()
         stackVCs.append(viewController)
         navigationController.setViewControllers(Array(stackVCs), animated: context.option.contains(.popReplaceAnimation))
+        return nil
     }
     
-    private func handlePopThenRefreshParameters(_ context: RoutingContext, navigationController: UINavigationController, popToIndex index: Int?) {
-        guard let index = index else { return }
+    @discardableResult private func handlePopThenRefreshParameters(_ context: RoutingContext, navigationController: UINavigationController, popToIndex index: Int?) -> RouterError? {
+        guard let index = index else { return .noStackPopDestinationIndex }
         let stackVCs = navigationController.viewControllers[0...index]
-        guard let lastVC = stackVCs.last else { return }
+        guard let lastVC = stackVCs.last else { return .noVCInStack }
         lastVC.routable?.viewControllerWillUpdateParameters(by: self, context: context)
         lastVC.routable?.parameters = context.params
         lastVC.routable?.viewControllerDidUpdateParameters(by: self, context: context)
         navigationController.setViewControllers(Array(stackVCs), animated: context.option.contains(.popReplaceAnimation))
+        return nil
     }
     
     //MARK: - Stack Handling

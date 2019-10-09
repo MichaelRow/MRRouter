@@ -83,7 +83,7 @@ public extension Navigator {
     func present(context: RoutingContext) {
         
         if let canNavigate = topMost?.routable?.viewControllerCanNavigate(by: self, context: context), !canNavigate {
-            context.completion?()
+            context.completion?(.rejectNavigate)
             return
         }
         
@@ -93,12 +93,12 @@ public extension Navigator {
         
         guard let viewController = instantiateViewController(context)
         else {
-            context.completion?()
+            context.completion?(.instantiateVCFailed)
             return
         }
         
         topMost?.present(viewController, animated: !context.option.contains(.withoutAnimation)) {
-            context.completion?()
+            context.completion?(nil)
             
             self.delegate?.navigator(self, didPresent: context)
         }

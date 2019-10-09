@@ -34,7 +34,7 @@ open class TabBarControllerNavigator: Navigator {
         guard context.viewControllerType != nil,
               navigatorViewController != nil
         else {
-            context.completion?()
+            context.completion?(.essitialCheckFail)
             return
         }
         if context.option.contains(.push) {
@@ -49,14 +49,14 @@ open class TabBarControllerNavigator: Navigator {
     public func push(context: RoutingContext) {
         
         if let canNavigate = topMost?.routable?.viewControllerCanNavigate(by: self, context: context), !canNavigate {
-            context.completion?()
+            context.completion?(.rejectNavigate)
             return
         }
         
         guard let tabBarController = rootTabBarController,
               let tabViewControllers = tabBarController.viewControllers
         else {
-            context.completion?()
+            context.completion?(.tabBarControllerError)
             return
         }
                 
@@ -65,7 +65,7 @@ open class TabBarControllerNavigator: Navigator {
               toIndex < tabViewControllers.count,
               let navigationController = tabViewControllers[toIndex] as? UINavigationController
         else {
-            context.completion?()
+            context.completion?(.tabBarControllerError)
             return
         }
         

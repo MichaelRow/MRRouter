@@ -54,8 +54,10 @@
    router.open(url: "router://general")
    
    // or use push directly
-   router.push(url: "router://settings", parameters: ["WiFi":true], option: [.withoutAnimation]) {
-       print("Navigation Complete!")
+   router.push(url: "router://settings", parameters: ["WiFi":true], option: [.withoutAnimation]) { error in
+       if error == nil {
+           print("Navigation Complete!")
+       }
    }
    
    // you can present and wrap the VC in a navigation controller by adding the option

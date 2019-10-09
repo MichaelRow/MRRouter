@@ -7,6 +7,8 @@
 
 import UIKit
 
+public typealias RouterCompletion = (RouterError?) -> Void
+
 open class RoutingContext {
     
     public private(set) var originalURL: URLConvertible
@@ -19,13 +21,13 @@ open class RoutingContext {
     
     public var viewControllerType: UIViewController.Type?
     
-    public var completion: (() -> Void)?
+    public var completion: RouterCompletion?
     
     public lazy var option: RoutingOption = []
     
     public var toTabBarIndex: Int?
     
-    public init(originalURL: URLConvertible, params: [String : Any]? = nil, placeholders: [String : Any]? = nil, viewControllerType: UIViewController.Type?, completion: (() -> Void)?) {
+    public init(originalURL: URLConvertible, params: [String : Any]? = nil, placeholders: [String : Any]? = nil, viewControllerType: UIViewController.Type?, completion: RouterCompletion?) {
         self.originalURL = originalURL
         self.viewControllerType = viewControllerType
         self.completion = completion

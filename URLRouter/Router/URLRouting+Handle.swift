@@ -9,13 +9,13 @@ public extension URLRouting {
         
     func handle(_ context: RoutingContext) {
         guard handleResolvers(context) else {
-            context.completion?()
+            context.completion?(.resolveFailed)
             return
         }
         
         handleAsyncHandlers(context) { success in
             guard success else {
-                context.completion?()
+                context.completion?(.asyncResolveFailed)
                 return
             }
             
