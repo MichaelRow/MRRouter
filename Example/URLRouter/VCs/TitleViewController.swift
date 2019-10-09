@@ -11,24 +11,21 @@ import URLRouter
 
 class TitleViewController: UIViewController, RoutableViewController {
     
-    class var stackLevel: StackLevel { return .lowest }
-    
-    required convenience init(_ parameters: [String : Any]) {
-        self.init()
-    }
-    
-    func viewControllerWillUpdateParameters(by navigator: Navigator, context: RoutingContext) {}
-    
-    func viewControllerDidUpdateParameters(by navigator: Navigator, context: RoutingContext) {}
-    
     lazy var parameters = [String : Any]()
-        
-    @IBOutlet weak var textView: UITextView?
-    @IBOutlet weak var label: UILabel?
+    
+    class var stackLevel: StackLevel { return .lowest }
     
     init() {
         super.init(nibName: "TitleViewController", bundle: nil)
     }
+    
+    required init(_ parameters: [String : Any]) {
+        super.init(nibName: "TitleViewController", bundle: nil)
+        self.parameters = parameters
+    }
+        
+    @IBOutlet weak var textView: UITextView?
+    @IBOutlet weak var label: UILabel?
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)

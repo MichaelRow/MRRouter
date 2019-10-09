@@ -114,13 +114,13 @@ class DebugConsoleView: UIView {
     @objc func pushAction(_ sender: UIButton) {
         guard let url = textField.text else { return }
         let tabIndex = Int(tabTextField.text ?? "")
-        sharedDebugMapper.selectedRouter?.push(url: url, parameters: [:], option: optionInTableView(), tabbarIndex: tabIndex, completion: nil)
+        sharedDebugMapper.selectedRouter.push(url: url, parameters: [:], option: optionInTableView(), tabbarIndex: tabIndex, completion: nil)
     }
     
     @objc func presentAction(_ sender: UIButton) {
         guard let url = textField.text else { return }
         let tabIndex = Int(tabTextField.text ?? "")
-        sharedDebugMapper.selectedRouter?.present(url: url, parameters: [:], option: optionInTableView(), tabbarIndex: tabIndex, completion: nil)
+        sharedDebugMapper.selectedRouter.present(url: url, parameters: [:], option: optionInTableView(), tabbarIndex: tabIndex, completion: nil)
     }
     
     @objc func switchAction(_ sender: UIButton) {

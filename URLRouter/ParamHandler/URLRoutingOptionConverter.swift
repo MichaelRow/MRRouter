@@ -13,6 +13,8 @@ public struct URLRoutingOptionConverter: URLParameterHandler {
     
     public var priority: Priority { return .medium }
     
+    public init() {}
+    
     public func handle(_ context: RoutingContext) -> Bool {
         var option = context.option
         Router.Option.allCases.forEach { routerOpt in

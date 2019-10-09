@@ -22,7 +22,7 @@ public extension URLRouting {
             if handleRedirectors(context) {
                 return
             } else {
-                navigator.open(context: context)
+                nestRouter?.navigator.open(context: context)
             }
         }
     }
@@ -67,7 +67,7 @@ public extension URLRouting {
     private func handleRedirectors(_ context: RoutingContext) -> Bool {
         for redirector in redirectors {
             if redirector.canHandle, let url = redirector.handle(context) {
-                self.router?.open(url: url, parameters: context.params, completion: context.completion)
+                nestRouter?.open(url: url, parameters: context.params, completion: context.completion)
                 return true
             }
         }

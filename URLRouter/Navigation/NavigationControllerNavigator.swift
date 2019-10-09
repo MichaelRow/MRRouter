@@ -44,7 +44,7 @@ open class NavigationControllerNavigator: Navigator {
 
     public func push(context: RoutingContext) {
         
-        if let canNavigate = topMost?.routable?.viewControllerCanNavigate(by: self, context: context), canNavigate {
+        if let canNavigate = topMost?.routable?.viewControllerCanNavigate(by: self, context: context), !canNavigate {
             context.completion?()
             return
         }

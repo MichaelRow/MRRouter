@@ -13,24 +13,26 @@ open class Router {
     
     private(set) var rootNode = URLMapNode()
     
-    public var wildcardRouting: URLRouting? {
+    public var navigator: Navigator
+    
+    public var wildcardRouting: URLRouting {
         didSet {
-            wildcardRouting?.router = self
+            wildcardRouting.nestRouter = self
         }
     }
     
-    public init(_ wildcardRouting: URLRouting? = nil) {
+    public init(_ navigator: Navigator, wildcardRouting: URLRouting = URLRouting.general()) {
+        self.navigator = navigator
         self.wildcardRouting = wildcardRouting
-        self.wildcardRouting?.router = self
+        self.wildcardRouting.nestRouter = self
     }
     
     public func register(pattern: URLConvertible, viewControllerType: UIViewController.Type, routing: URLRouting? = nil, override: Bool = true) {
-        guard var usedRouting = routing ?? wildcardRouting else {
-            fatalError("必须在register方法中传入routing，或设置Router的wildcardRouting")
+        var usedRouting = routing ?? wildcardRouting
+        if usedRouting.nestRouter !== self {
+            usedRouting.nestRouter = self
         }
-        if usedRouting.router !== self {
-            usedRouting.router = self
-        }
+        
         guard let patternComponents = pattern.pathElement else { return }
         var currentNode = rootNode
         patternComponents.enumerated().forEach { (offset: Int, component: URLPathElement) in

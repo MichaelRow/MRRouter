@@ -12,13 +12,15 @@ public struct URLRouting {
     public private(set) var redirectors = [URLRedirectionHandler]()
     
     public private(set) var asyncHandlers = [URLParameterAsyncHandler]()
-        
-    public private(set) var navigator: Navigator
+
+    public weak var nestRouter: Router?
     
-    public weak var router: Router?
+    public init() {}
     
-    public init(navigator: Navigator) {
-        self.navigator = navigator
+    public static func general() -> Self {
+        var routing = Self()
+        routing.add(resolver: URLRoutingOptionConverter())
+        return routing
     }
     
     public mutating func add(resolver: URLParameterHandler) {

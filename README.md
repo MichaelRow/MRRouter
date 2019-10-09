@@ -11,14 +11,11 @@
    ```swi
    // get your root navigation controller here
    guard let navi = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController else { return }
-   let navigator = NavigationControllerNavigator(navi)
    
-   // you can add parameter resolvers, redirectors and async handlers to the routing if needed.
-   let routing = URLRouting(navigator: navigator)
-   
-   let router = Router(wildcardRouting) = routing
+   let naviNavigator = NavigationControllerNavigator(navi)
+   let router = Router(naviNavigator)
    ```
-
+   
 2. Register view controllers.
 
    ```swi
@@ -71,9 +68,9 @@ Just change the navigator type.
 
 ```swif
 guard let tabBarVC = UIApplication.shared.keyWindow?.rootViewController as? UITabBarController else { return }
-let navigator = TabBarControllerNavigator(tabBarVC)
-let routing = URLRouting(navigator: navigator)
-router.wildcardRouting = routing
+
+let tabBarNavigator = TabBarControllerNavigator(tabBarVC)
+let router = Router(tabBarNavigator)
 ```
 
 By the way, you can push your VC on any tab.

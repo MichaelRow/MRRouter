@@ -11,18 +11,16 @@ import URLRouter
 
 class DebugMapper {
             
-    var naviRouter = Router()
-    var tabBarRouter = Router()
-    var selectedRouter: Router?
+    var naviRouter: Router
+    var tabBarRouter: Router
+    var selectedRouter: Router
     
     init(naviVC: UINavigationController, tabBarVC: UITabBarController) {        
         let naviNavigator = NavigationControllerNavigator(naviVC)
-        let naviRouting = URLRouting(navigator:naviNavigator)
-        naviRouter.wildcardRouting = naviRouting
+        naviRouter = Router(naviNavigator)
         
         let tabBarNavigator = TabBarControllerNavigator(tabBarVC)
-        let tabBarRouting = URLRouting(navigator: tabBarNavigator)
-        tabBarRouter.wildcardRouting = tabBarRouting
+        tabBarRouter = Router(tabBarNavigator)
         
         selectedRouter = naviRouter
         
@@ -42,7 +40,7 @@ class DebugMapper {
     }
     
     func switchRouter() {
-        if selectedRouter != nil && selectedRouter! === naviRouter {
+        if selectedRouter === naviRouter {
             selectedRouter = tabBarRouter
         } else {
             selectedRouter = naviRouter

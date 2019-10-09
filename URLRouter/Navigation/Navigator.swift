@@ -52,25 +52,25 @@ public extension Navigator {
     private func topMost(of viewController: UIViewController?) -> UIViewController? {
         // presented view controller
         if let presentedViewController = viewController?.presentedViewController {
-            return self.topMost(of: presentedViewController)
+            return topMost(of: presentedViewController)
         }
         
         // UITabBarController
         if let tabBarController = viewController as? UITabBarController,
             let selectedViewController = tabBarController.selectedViewController {
-            return self.topMost(of: selectedViewController)
+            return topMost(of: selectedViewController)
         }
         
         // UINavigationController
         if let navigationController = viewController as? UINavigationController,
             let visibleViewController = navigationController.visibleViewController {
-            return self.topMost(of: visibleViewController)
+            return topMost(of: visibleViewController)
         }
         
         // UIPageController
         if let pageViewController = viewController as? UIPageViewController,
             pageViewController.viewControllers?.count == 1 {
-            return self.topMost(of: pageViewController.viewControllers?.first)
+            return topMost(of: pageViewController.viewControllers?.first)
         }
         
         return viewController
@@ -82,7 +82,7 @@ public extension Navigator {
     
     func present(context: RoutingContext) {
         
-        if let canNavigate = topMost?.routable?.viewControllerCanNavigate(by: self, context: context), canNavigate {
+        if let canNavigate = topMost?.routable?.viewControllerCanNavigate(by: self, context: context), !canNavigate {
             context.completion?()
             return
         }
