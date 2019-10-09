@@ -59,7 +59,7 @@ public extension URLRouting {
     private func handleRedirectors(_ context: URLRoutingContext) -> Bool {
         for redirector in redirectors {
             if redirector.canHandle, let url = redirector.handle(context) {
-                Router.shared.open(url: url, parameters: context.params, completion: context.completion)
+                self.router?.open(url: url, parameters: context.params, completion: context.completion)
                 return true
             }
         }

@@ -8,20 +8,28 @@
 import UIKit
 
 open class Router {
-    
-    public static let shared = Router()
-    
+        
     public lazy var matcher: URLMatcher = GeneralURLMatcher()
-    
-    public var wildcardRouting: URLRouting?
     
     private(set) var rootNode = URLMapNode()
     
-    public init() {}
+    public var wildcardRouting: URLRouting? {
+        didSet {
+            wildcardRouting?.router = self
+        }
+    }
+    
+    public init(_ wildcardRouting: URLRouting? = nil) {
+        self.wildcardRouting = wildcardRouting
+        self.wildcardRouting?.router = self
+    }
     
     public func register(pattern: URLConvertible, viewControllerType: UIViewController.Type, routing: URLRouting? = nil, override: Bool = true) {
-        guard let usedRouting = routing ?? wildcardRouting else {
+        guard var usedRouting = routing ?? wildcardRouting else {
             fatalError("必须在register方法中传入routing，或设置Router的wildcardRouting")
+        }
+        if usedRouting.router !== self {
+            usedRouting.router = self
         }
         guard let patternComponents = pattern.pathElement else { return }
         var currentNode = rootNode

@@ -15,6 +15,8 @@ public struct URLRouting {
         
     public private(set) var navigator: Navigator
     
+    public weak var router: Router?
+    
     public init(navigator: Navigator) {
         self.navigator = navigator
     }

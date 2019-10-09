@@ -1,6 +1,6 @@
 # URLRouter
 
-![Swift](https://img.shields.io/badge/Swift-5.1-orange.svg) [![Version](https://img.shields.io/cocoapods/v/URLRouter.svg?style=flat)](https://cocoapods.org/pods/URLRouter) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![License](https://img.shields.io/cocoapods/l/URLRouter.svg?style=flat)](https://cocoapods.org/pods/URLRouter) [![Platform](https://img.shields.io/cocoapods/p/URLRouter.svg?style=flat)](https://cocoapods.org/pods/URLRouter)
+![Swift](https://img.shields.io/badge/Swift-5.1-orange.svg) ![Version](https://img.shields.io/cocoapods/v/URLRouter.svg?style=flat) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) ![License](https://img.shields.io/cocoapods/l/URLRouter.svg?style=flat) ![Platform](https://img.shields.io/cocoapods/p/URLRouter.svg?style=flat)
 
 ## How to Use
 
@@ -16,7 +16,7 @@
    // you can add parameter resolvers, redirectors and async handlers to the routing if needed.
    let routing = URLRouting(navigator: navigator)
    
-   Router.shared.wildcardRouting = routing
+   let router = Router(wildcardRouting) = routing
    ```
 
 2. Register view controllers.
@@ -43,26 +43,26 @@
    // Not conforming to the protocol is OK as also.
    class SettingsVC: UIViewController {}
    
-   Router.shared.register(pattern: "router://general", viewControllerType: GeneralVC.self)
-   Router.shared.register(pattern: "router://settings", viewControllerType: SettingsVC.self)
+   router.register(pattern: "router://general", viewControllerType: GeneralVC.self)
+   router.register(pattern: "router://settings", viewControllerType: SettingsVC.self)
    
    // use <NAME> in the URL path components match all possible values, and you can get it as a parameter from the parameters dictionary.
-   Router.shared.register(pattern: "router://user/<name>", viewControllerType: UserVC.self)
+   router.register(pattern: "router://user/<name>", viewControllerType: UserVC.self)
    ```
 
 3. Open the URL registered. All the annorying measures will be perfectly managed by the navigator, just open it.
 
    ```swif
    // open use push by default
-   Router.shared.open(url: "router://general")
+   router.open(url: "router://general")
    
    // or use push directly
-   Router.shared.push(url: "router://settings", parameters: ["WiFi":true], option: [.withoutAnimation]) {
+   router.push(url: "router://settings", parameters: ["WiFi":true], option: [.withoutAnimation]) {
        print("Navigation Complete!")
    }
    
    // you can present and wrap the VC in a navigation controller by adding the option
-   Router.shared.present(url: "router://user/MichaelRow", option: [.wrapInNavigation])
+   router.present(url: "router://user/MichaelRow", option: [.wrapInNavigation])
    ```
 
 #### For a TabBarController-base app
@@ -73,13 +73,13 @@ Just change the navigator type.
 guard let tabBarVC = UIApplication.shared.keyWindow?.rootViewController as? UITabBarController else { return }
 let navigator = TabBarControllerNavigator(tabBarVC)
 let routing = URLRouting(navigator: navigator)
-Router.shared.wildcardRouting = routing
+router.wildcardRouting = routing
 ```
 
 By the way, you can push your VC on any tab.
 
 ```sw
-Router.shared.push(url: "router://general", tabbarIndex: 2)
+router.push(url: "router://general", tabbarIndex: 2)
 ```
 
 
@@ -130,7 +130,7 @@ $ brew update
 $ brew install carthage
 ```
 
-To integrate AFNetworking into your Xcode project using Carthage, specify it in your `Cartfile`:
+To integrate URLRouter into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
 github "MichaelRow/URLRouter"
