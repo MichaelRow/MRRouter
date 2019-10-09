@@ -84,7 +84,13 @@ public extension Navigator {
         delegate?.navigator(self, willPresent: context)
         
         dismissModalIfNeeded(context)
-        guard let viewController = instantiateViewController(context) else { return }
+        
+        guard let viewController = instantiateViewController(context)
+        else {
+            context.completion?()
+            return
+        }
+        
         topMost?.present(viewController, animated: !context.option.contains(.withoutAnimation)) {
             context.completion?()
             

@@ -8,9 +8,17 @@
 public extension URLRouting {
         
     func handle(_ context: RoutingContext) {
-        guard handleResolvers(context) else { return }
+        guard handleResolvers(context) else {
+            context.completion?()
+            return
+        }
+        
         handleAsyncHandlers(context) { success in
-            guard success else { return }
+            guard success else {
+                context.completion?()
+                return
+            }
+            
             if handleRedirectors(context) {
                 return
             } else {

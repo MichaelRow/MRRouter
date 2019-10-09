@@ -28,7 +28,11 @@ open class NavigationControllerNavigator: Navigator {
     public func open(context: RoutingContext) {
         guard context.viewControllerType != nil,
               rootNavigationController != nil
-        else { return }
+        else {
+            context.completion?()
+            return
+        }
+        
         if context.option.contains(.push) {
             push(context: context)
         } else if context.option.contains(.present) {
@@ -41,7 +45,11 @@ open class NavigationControllerNavigator: Navigator {
     public func push(context: RoutingContext) {
         dismissModalIfNeeded(context) {
             // 先找到合适的导航栏控制器
-            guard let navigationController = context.option.contains(.useTopMostNavigation) ? self.topMostNavigation : self.rootNavigationController else { return }
+            guard let navigationController = context.option.contains(.useTopMostNavigation) ? self.topMostNavigation : self.rootNavigationController
+            else {
+                context.completion?()
+                return
+            }
             
             self.dismissModal(for: navigationController, animated: !context.option.contains(.withoutDismissalAnimation)) {
                 // 根据优先级处理出入页面栈逻辑

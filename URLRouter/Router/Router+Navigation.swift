@@ -21,9 +21,15 @@ public extension Router {
     
     func open(url: URLConvertible, parameters: [String : Any]? = nil, option: RoutingOption = [], tabbarIndex: Int? = nil, completion:(() -> Void)? = nil) {
         let result = matcher.match(pattern: url, with: rootNode)
+        
         let context = RoutingContext(originalURL: url, params: parameters, placeholders: result?.placeholders, viewControllerType: result?.matchedNode.viewControllerType, completion: completion)
         context.option = option
         context.toTabBarIndex = tabbarIndex
-        result?.matchedNode.routing?.handle(context)
+        
+        if let routing = result?.matchedNode.routing {
+            routing.handle(context)
+        } else {
+            completion?()
+        }
     }
 }

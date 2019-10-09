@@ -33,7 +33,10 @@ open class TabBarControllerNavigator: Navigator {
     public func open(context: RoutingContext) {
         guard context.viewControllerType != nil,
               navigatorViewController != nil
-        else { return }
+        else {
+            context.completion?()
+            return
+        }
         if context.option.contains(.push) {
             push(context: context)
         } else if context.option.contains(.present) {
@@ -46,13 +49,19 @@ open class TabBarControllerNavigator: Navigator {
     public func push(context: RoutingContext) {
         guard let tabBarController = rootTabBarController,
               let tabViewControllers = tabBarController.viewControllers
-        else { return }
+        else {
+            context.completion?()
+            return
+        }
                 
         let toIndex = context.toTabBarIndex == nil ? tabBarController.selectedIndex : context.toTabBarIndex!
         guard toIndex < 5,
               toIndex < tabViewControllers.count,
               let navigationController = tabViewControllers[toIndex] as? UINavigationController
-        else { return }
+        else {
+            context.completion?()
+            return
+        }
         
         if toIndex == tabBarController.selectedIndex {
             navigationControllerNavigator.rootNavigationController = navigationController
