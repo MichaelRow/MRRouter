@@ -47,6 +47,12 @@ open class TabBarControllerNavigator: Navigator {
     }
     
     public func push(context: RoutingContext) {
+        
+        if let canNavigate = topMost?.routable?.viewControllerCanNavigate(by: self, context: context), canNavigate {
+            context.completion?()
+            return
+        }
+        
         guard let tabBarController = rootTabBarController,
               let tabViewControllers = tabBarController.viewControllers
         else {
