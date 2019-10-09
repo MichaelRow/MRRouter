@@ -9,7 +9,7 @@ import UIKit
 
 open class Router {
         
-    public lazy var matcher: URLMatcher = GeneralURLMatcher()
+    public lazy var matcher: URLMatcher.Type = GeneralURLMatcher.self
     
     private(set) var rootNode = URLMapNode()
     

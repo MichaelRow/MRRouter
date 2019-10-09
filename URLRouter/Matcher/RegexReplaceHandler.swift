@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class RegexReplaceHandler {
+public struct RegexReplaceHandler {
     
     public var replacement: String
     
