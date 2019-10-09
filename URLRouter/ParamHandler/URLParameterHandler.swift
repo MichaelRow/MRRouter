@@ -17,7 +17,7 @@ public protocol URLParameterHandler: CustomStringConvertible {
     ///
     /// - Parameter context: 路由上下文
     /// - Returns: 是否正常处理，异常情况终止路由
-    func handle(_ context: URLRoutingContext) -> Bool
+    func handle(_ context: RoutingContext) -> Bool
     
 }
 
@@ -33,7 +33,7 @@ public protocol URLRedirectionHandler: CustomStringConvertible {
     ///
     /// - Parameter context: 路由上下文
     /// - Returns: 重定向URL
-    func handle(_ context: URLRoutingContext) -> URLConvertible?
+    func handle(_ context: RoutingContext) -> URLConvertible?
     
 }
 
@@ -50,6 +50,6 @@ public protocol URLParameterAsyncHandler: CustomStringConvertible {
     /// - Parameters:
     ///   - context: 路由上下文
     ///   - completion: 完成异步处理后回调，失败会终止路由
-    func handle(_ context: URLRoutingContext, completion:((_ success: Bool) -> Void))
+    func handle(_ context: RoutingContext, completion:((_ success: Bool) -> Void))
     
 }

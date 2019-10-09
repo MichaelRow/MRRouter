@@ -17,9 +17,9 @@ class TitleViewController: UIViewController, RoutableViewController {
         self.init()
     }
     
-    func viewControllerWillUpdateParameters(by navigator: Navigator, context: URLRoutingContext) {}
+    func viewControllerWillUpdateParameters(by navigator: Navigator, context: RoutingContext) {}
     
-    func viewControllerDidUpdateParameters(by navigator: Navigator, context: URLRoutingContext) {}
+    func viewControllerDidUpdateParameters(by navigator: Navigator, context: RoutingContext) {}
     
     lazy var parameters = [String : Any]()
         

@@ -7,7 +7,7 @@
 
 import UIKit
 
-open class URLRoutingContext {
+open class RoutingContext {
     
     public private(set) var originalURL: URLConvertible
     
@@ -49,7 +49,7 @@ open class URLRoutingContext {
     }
 }
 
-public extension URLRoutingContext {
+public extension RoutingContext {
     subscript(key: Router.Params) -> [String : Any]? {
         get { return params[key] }
         set { params[key] = newValue }

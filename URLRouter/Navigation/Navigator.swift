@@ -9,17 +9,19 @@ import UIKit
 
 public protocol Navigator: class {
     
+    var delegate: NavigatorDelegate? { get set }
+    
     /// 用于跳转的控制器
     var navigatorViewController: UIViewController? { get }
     
     /// 模态弹出时用的包装导航控制器
     var wrapperType: UINavigationController.Type { get set }
     
-    func open(context: URLRoutingContext)
+    func open(context: RoutingContext)
     
-    func present(context: URLRoutingContext)
+    func present(context: RoutingContext)
     
-    func push(context: URLRoutingContext)
+    func push(context: RoutingContext)
 }
 
 public extension Navigator {
@@ -78,13 +80,19 @@ public extension Navigator {
 
 public extension Navigator {
     
-    func present(context: URLRoutingContext) {
+    func present(context: RoutingContext) {
+        delegate?.navigator(self, willPresent: context)
+        
         dismissModalIfNeeded(context)
         guard let viewController = instantiateViewController(context) else { return }
-        topMost?.present(viewController, animated: !context.option.contains(.withoutAnimation), completion: context.completion)
+        topMost?.present(viewController, animated: !context.option.contains(.withoutAnimation)) {
+            context.completion?()
+            
+            self.delegate?.navigator(self, didPresent: context)
+        }
     }
     
-    internal func dismissModalIfNeeded(_ context: URLRoutingContext, completion: (() -> Void)? = nil) {
+    internal func dismissModalIfNeeded(_ context: RoutingContext, completion: (() -> Void)? = nil) {
         if context.option.contains(.dismissModal) {
             dismissModal(context) {
                 completion?()
@@ -94,7 +102,7 @@ public extension Navigator {
         }
     }
     
-    internal func dismissModal(_ context: URLRoutingContext, completion: (() -> Void)? = nil) {
+    internal func dismissModal(_ context: RoutingContext, completion: (() -> Void)? = nil) {
         if let presentedVC = navigatorViewController?.presentedViewController {
             dismissModal(for: presentedVC) {
                 presentedVC.dismiss(animated: !context.option.contains(.withoutDismissalAnimation), completion: completion)
@@ -127,7 +135,7 @@ public extension Navigator {
         }
     }
     
-    internal func instantiateViewController(_ context: URLRoutingContext) -> UIViewController? {
+    internal func instantiateViewController(_ context: RoutingContext) -> UIViewController? {
         guard let viewController = context.instantiateViewController() else { return nil }
         viewController.routable?.parameters = context.params
         if context.option.contains(.wrapInNavigation), !context.option.contains(.push) {

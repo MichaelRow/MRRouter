@@ -9,7 +9,10 @@ import UIKit
 
 open class TabBarControllerNavigator: Navigator {
     
+    //TODO: 这种嵌套的代码复用方式不太合适
     private var navigationControllerNavigator: NavigationControllerNavigator
+    
+    public weak var delegate: NavigatorDelegate?
     
     public weak var rootTabBarController: UITabBarController?
         
@@ -24,9 +27,10 @@ open class TabBarControllerNavigator: Navigator {
         self.rootTabBarController = tabBarController ?? UIApplication.shared.keyWindow?.rootViewController as? UITabBarController
         self.wrapperType = wrapperType
         self.navigationControllerNavigator = NavigationControllerNavigator(nil, wrapperType: wrapperType)
+        self.navigationControllerNavigator.delegate = self
     }
     
-    public func open(context: URLRoutingContext) {
+    public func open(context: RoutingContext) {
         guard context.viewControllerType != nil,
               navigatorViewController != nil
         else { return }
@@ -39,11 +43,11 @@ open class TabBarControllerNavigator: Navigator {
         }
     }
     
-    public func push(context: URLRoutingContext) {
+    public func push(context: RoutingContext) {
         guard let tabBarController = rootTabBarController,
               let tabViewControllers = tabBarController.viewControllers
         else { return }
-        
+                
         let toIndex = context.toTabBarIndex == nil ? tabBarController.selectedIndex : context.toTabBarIndex!
         guard toIndex < 5,
               toIndex < tabViewControllers.count,
@@ -59,5 +63,19 @@ open class TabBarControllerNavigator: Navigator {
             navigationControllerNavigator.rootNavigationController = navigationController
             navigationControllerNavigator.open(context: context)
         }
+    }
+}
+
+extension TabBarControllerNavigator: NavigatorDelegate {
+    
+    public func navigator(_ navigator: Navigator, willPresent context: RoutingContext) {}
+    public func navigator(_ navigator: Navigator, didPresent context: RoutingContext) {}
+    
+    public func navigator(_ navigator: Navigator, willPush stackType: StackType) {
+        delegate?.navigator(navigator, willPush: stackType)
+    }
+    
+    public func navigator(_ navigator: Navigator, didPush stackType: StackType) {
+        delegate?.navigator(navigator, didPush: stackType)
     }
 }

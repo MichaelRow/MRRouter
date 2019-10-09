@@ -13,14 +13,14 @@ public protocol RoutableViewController: class {
     
     init(_ parameters: [String : Any])
     
-    func viewControllerWillUpdateParameters(by navigator: Navigator, context: URLRoutingContext)
+    func viewControllerWillUpdateParameters(by navigator: Navigator, context: RoutingContext)
     
-    func viewControllerDidUpdateParameters(by navigator: Navigator, context: URLRoutingContext)
+    func viewControllerDidUpdateParameters(by navigator: Navigator, context: RoutingContext)
 } 
 
 extension RoutableViewController {
     
-    func viewControllerWillUpdateParameters(by navigator: Navigator, context: URLRoutingContext) {}
+    func viewControllerWillUpdateParameters(by navigator: Navigator, context: RoutingContext) {}
     
-    func viewControllerDidUpdateParameters(by navigator: Navigator, context: URLRoutingContext) {}
+    func viewControllerDidUpdateParameters(by navigator: Navigator, context: RoutingContext) {}
 }
