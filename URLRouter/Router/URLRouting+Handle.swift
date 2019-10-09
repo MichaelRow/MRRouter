@@ -22,7 +22,12 @@ public extension URLRouting {
             if handleRedirectors(context) {
                 return
             } else {
-                nestRouter?.navigator.open(context: context)
+                
+                if let navigationHandler = navigationHandler {
+                    navigationHandler()
+                } else {
+                    nestRouter?.navigator.open(context: context)
+                }
             }
         }
     }
