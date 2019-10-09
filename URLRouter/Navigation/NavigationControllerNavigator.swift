@@ -10,16 +10,16 @@ import UIKit
 open class NavigationControllerNavigator: Navigator {
     
     public weak var rootNavigationController: UINavigationController?
-        
-    public weak var nestWindow: UIWindow?
-    
+            
     public var wrapperType: UINavigationController.Type
         
     public var navigatorViewController: UIViewController? { return rootNavigationController }
     
-    public init(_ navigation: UINavigationController?, window: UIWindow? = nil, wrapperType: UINavigationController.Type = UINavigationController.self) {
-        self.rootNavigationController = navigation
-        self.nestWindow = window
+    /// 初始化基于UINavigationController的跳转控制器
+    /// - Parameter tabBarController: 跳转执行的NavigationController，如果不设值，则尝试用keyWindow根视图控制器
+    /// - Parameter wrapperType: 模态弹出时用的包装导航控制器
+    public init(_ navigation: UINavigationController?, wrapperType: UINavigationController.Type = UINavigationController.self) {
+        self.rootNavigationController = navigation ?? UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
         self.wrapperType = wrapperType
     }
     

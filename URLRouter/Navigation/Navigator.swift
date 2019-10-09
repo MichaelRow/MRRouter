@@ -9,10 +9,10 @@ import UIKit
 
 public protocol Navigator: class {
     
+    /// 用于跳转的控制器
     var navigatorViewController: UIViewController? { get }
     
-    var nestWindow: UIWindow? { get }
-    
+    /// 模态弹出时用的包装导航控制器
     var wrapperType: UINavigationController.Type { get set }
     
     func open(context: URLRoutingContext)
@@ -24,13 +24,9 @@ public protocol Navigator: class {
 
 public extension Navigator {
     
-    var window: UIWindow? {
-        return nestWindow ?? UIApplication.shared.keyWindow
-    }
-    
     var topMost: UIViewController? {
-        guard let rootViewController = currentRootViewController else { return nil }
-        return self.topMost(of: rootViewController)
+        guard let navigatorViewController = navigatorViewController else { return nil }
+        return self.topMost(of: navigatorViewController)
     }
     
     var topMostNavigation: UINavigationController? {
@@ -49,10 +45,6 @@ public extension Navigator {
         } while currentVC != nil
         
         return nil
-    }
-    
-    private var currentRootViewController: UIViewController? {
-        return window?.rootViewController
     }
     
     private func topMost(of viewController: UIViewController?) -> UIViewController? {

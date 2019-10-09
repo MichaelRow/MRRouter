@@ -15,12 +15,12 @@ class DebugMapper {
     var tabBarRouter = Router()
     var selectedRouter: Router?
     
-    init(naviVC: UINavigationController, tabBarVC: UITabBarController, on window: UIWindow) {        
-        let naviNavigator = NavigationControllerNavigator(naviVC, window: window)
+    init(naviVC: UINavigationController, tabBarVC: UITabBarController) {        
+        let naviNavigator = NavigationControllerNavigator(naviVC)
         let naviRouting = URLRouting(navigator:naviNavigator)
         naviRouter.wildcardRouting = naviRouting
         
-        let tabBarNavigator = TabBarControllerNavigator(tabBarVC, window: window)
+        let tabBarNavigator = TabBarControllerNavigator(tabBarVC)
         let tabBarRouting = URLRouting(navigator: tabBarNavigator)
         tabBarRouter.wildcardRouting = tabBarRouting
         

@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.makeKeyAndVisible()
         self.window = window
         
-        sharedDebugMapper = DebugMapper(naviVC: naviVC, tabBarVC: tabBarVC, on: window)
+        sharedDebugMapper = DebugMapper(naviVC: naviVC, tabBarVC: tabBarVC)
         
         debugWindow = DebugWindow(frame: UIScreen.main.bounds)
         debugWindow?.makeKeyAndVisible()

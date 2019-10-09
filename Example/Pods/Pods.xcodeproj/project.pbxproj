@@ -22,7 +22,7 @@
 		603986CEEE0E56C095D1C35B78675E5B /* URLRouter-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A6E58F5B0F519CD99DE0D7F3B7049C4 /* URLRouter-dummy.m */; };
 		6A1847CEF2AD9269F2B819BC76A98EAB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
 		6F1015A8FB6B86D8ECE8A9BC4B85EBE2 /* URLRouter-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AFC884AE8293765681829C63D506A7B /* URLRouter-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		81221F65188DBE4752F3C910FE1B9F81 /* Router+Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A361E24C04E5BADF15A8F8B71FB9CB /* Router+Navigator.swift */; };
+		81221F65188DBE4752F3C910FE1B9F81 /* Router+Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A361E24C04E5BADF15A8F8B71FB9CB /* Router+Navigation.swift */; };
 		88124C2F232DC91C00A7D6FF /* RoutableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88124C2E232DC91C00A7D6FF /* RoutableViewController.swift */; };
 		88144701232C7B0300A27597 /* URLRouting+Handle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88144700232C7B0300A27597 /* URLRouting+Handle.swift */; };
 		883B4296234811A80024AEFB /* RouterKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883B42942348103D0024AEFB /* RouterKey.swift */; };
@@ -97,7 +97,7 @@
 		ACC06FD77B10B9C534C458C5C83F63E7 /* Pods-URLRouter_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-URLRouter_Example-dummy.m"; sourceTree = "<group>"; };
 		AF48D204CD7BF9F013A2E39373135E99 /* URLParameterHandler.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = URLParameterHandler.swift; sourceTree = "<group>"; };
 		B17C051C180526E3846C8A490849BB95 /* Navigator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Navigator.swift; sourceTree = "<group>"; };
-		B2A361E24C04E5BADF15A8F8B71FB9CB /* Router+Navigator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Router+Navigator.swift"; sourceTree = "<group>"; };
+		B2A361E24C04E5BADF15A8F8B71FB9CB /* Router+Navigation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Router+Navigation.swift"; sourceTree = "<group>"; };
 		B38D4ADD6AAFFC9D61B8ABA0AF09C6E3 /* Pods-URLRouter_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-URLRouter_Example.release.xcconfig"; sourceTree = "<group>"; };
 		B4BF9975B08375175DF5C31A0FBF1121 /* Pods-URLRouter_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-URLRouter_Example-umbrella.h"; sourceTree = "<group>"; };
 		B636C9460CFABAA05E8FAE28F220C03E /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -196,7 +196,7 @@
 				88124C2E232DC91C00A7D6FF /* RoutableViewController.swift */,
 				7FEF5E166F15D3CCFBE104EC81C59988 /* URLRoutingContext.swift */,
 				5C691B373B9EDF50F9F852443FCC51AA /* Router.swift */,
-				B2A361E24C04E5BADF15A8F8B71FB9CB /* Router+Navigator.swift */,
+				B2A361E24C04E5BADF15A8F8B71FB9CB /* Router+Navigation.swift */,
 				DF1F729E749A7A059AB4656F1C0BBA9E /* URLRouting.swift */,
 				88144700232C7B0300A27597 /* URLRouting+Handle.swift */,
 			);
@@ -494,7 +494,7 @@
 				A16AD45912FD79E61CE3D3F3FA084A48 /* RegexReplaceHandler.swift in Sources */,
 				4C1905B02338C81200727CBA /* UIViewController+Routable.swift in Sources */,
 				88144701232C7B0300A27597 /* URLRouting+Handle.swift in Sources */,
-				81221F65188DBE4752F3C910FE1B9F81 /* Router+Navigator.swift in Sources */,
+				81221F65188DBE4752F3C910FE1B9F81 /* Router+Navigation.swift in Sources */,
 				A8255A743BDBF8BA60A64F945BE653F3 /* Router.swift in Sources */,
 				4CCEC050233DD57C00CA86B5 /* TabBarControllerNavigator.swift in Sources */,
 				8FD00FA168FEE0A7F909B10B3B346DC4 /* URLConvertible.swift in Sources */,

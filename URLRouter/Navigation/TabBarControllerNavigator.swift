@@ -12,18 +12,18 @@ open class TabBarControllerNavigator: Navigator {
     private var navigationControllerNavigator: NavigationControllerNavigator
     
     public weak var rootTabBarController: UITabBarController?
-    
-    public weak var nestWindow: UIWindow?
-    
+        
     public var wrapperType: UINavigationController.Type
     
     public var navigatorViewController: UIViewController? { return rootTabBarController }
     
-    public init(_ tabBarController: UITabBarController?, window: UIWindow? = nil, wrapperType: UINavigationController.Type = UINavigationController.self) {
-        self.rootTabBarController = tabBarController
-        self.nestWindow = window
+    /// 初始化基于UITabBarController的跳转控制器
+    /// - Parameter tabBarController: 跳转执行的TabBarController，如果不设值，则尝试用keyWindow根视图控制器
+    /// - Parameter wrapperType: 模态弹出时用的包装导航控制器
+    public init(_ tabBarController: UITabBarController? = nil, wrapperType: UINavigationController.Type = UINavigationController.self) {
+        self.rootTabBarController = tabBarController ?? UIApplication.shared.keyWindow?.rootViewController as? UITabBarController
         self.wrapperType = wrapperType
-        self.navigationControllerNavigator = NavigationControllerNavigator(nil, window: window, wrapperType: wrapperType)
+        self.navigationControllerNavigator = NavigationControllerNavigator(nil, wrapperType: wrapperType)
     }
     
     public func open(context: URLRoutingContext) {
