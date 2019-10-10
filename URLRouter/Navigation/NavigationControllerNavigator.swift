@@ -44,14 +44,14 @@ open class NavigationControllerNavigator: Navigator {
 
     public func push(context: RoutingContext) {
         
-        if let canNavigate = topMost?.routable?.viewControllerCanNavigate(by: self, context: context), !canNavigate {
+        if let canNavigate = navigatorViewController?.topMost?.routable?.viewControllerCanNavigate(by: self, context: context), !canNavigate {
             context.completion?(.rejectNavigate)
             return
         }
         
         dismissModalIfNeeded(context) {
             // 先找到合适的导航栏控制器
-            guard let navigationController = context.option.contains(.useTopMostNavigation) ? self.topMostNavigation : self.rootNavigationController
+            guard let navigationController = context.option.contains(.useTopMostNavigation) ? self.navigatorViewController?.topMostNavigation : self.rootNavigationController
             else {
                 context.completion?(.noNavigationController)
                 return

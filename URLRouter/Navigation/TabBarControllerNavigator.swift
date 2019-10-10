@@ -48,7 +48,7 @@ open class TabBarControllerNavigator: Navigator {
     
     public func push(context: RoutingContext) {
         
-        if let canNavigate = topMost?.routable?.viewControllerCanNavigate(by: self, context: context), !canNavigate {
+        if let canNavigate = navigatorViewController?.topMost?.routable?.viewControllerCanNavigate(by: self, context: context), !canNavigate {
             context.completion?(.rejectNavigate)
             return
         }
