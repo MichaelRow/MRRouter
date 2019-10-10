@@ -29,6 +29,9 @@
 		883B4296234811A80024AEFB /* RouterKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 883B42942348103D0024AEFB /* RouterKey.swift */; };
 		884B7D3E234E3A550098B300 /* RouterError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884B7D3D234E3A550098B300 /* RouterError.swift */; };
 		884E84DC234EA93F00BCC9D9 /* UIViewController+TopMost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884E84DB234EA93F00BCC9D9 /* UIViewController+TopMost.swift */; };
+		884E84E0234EADC100BCC9D9 /* PushAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884E84DF234EADC100BCC9D9 /* PushAction.swift */; };
+		884E84E2234EADD000BCC9D9 /* ModalAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884E84E1234EADD000BCC9D9 /* ModalAction.swift */; };
+		884E84E4234EADE200BCC9D9 /* PresentAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884E84E3234EADE200BCC9D9 /* PresentAction.swift */; };
 		889E691A2349989700138346 /* URLRoutingOptionConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 889E69192349989700138346 /* URLRoutingOptionConverter.swift */; };
 		8FD00FA168FEE0A7F909B10B3B346DC4 /* URLConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41EE5A1F94BC2CFFE25A3BDBD2A0443 /* URLConvertible.swift */; };
 		9FE58358542161FEE699B1C4C483ACCB /* URLPathElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FE9EBBBAB1BF30C0781518E2AE792F1 /* URLPathElement.swift */; };
@@ -93,6 +96,9 @@
 		883B42942348103D0024AEFB /* RouterKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterKey.swift; sourceTree = "<group>"; };
 		884B7D3D234E3A550098B300 /* RouterError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouterError.swift; sourceTree = "<group>"; };
 		884E84DB234EA93F00BCC9D9 /* UIViewController+TopMost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+TopMost.swift"; sourceTree = "<group>"; };
+		884E84DF234EADC100BCC9D9 /* PushAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushAction.swift; sourceTree = "<group>"; };
+		884E84E1234EADD000BCC9D9 /* ModalAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalAction.swift; sourceTree = "<group>"; };
+		884E84E3234EADE200BCC9D9 /* PresentAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentAction.swift; sourceTree = "<group>"; };
 		889E69192349989700138346 /* URLRoutingOptionConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRoutingOptionConverter.swift; sourceTree = "<group>"; };
 		890ACBBFA4174A46142D0439DB6EA9E1 /* Pods-URLRouter_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-URLRouter_Tests.modulemap"; sourceTree = "<group>"; };
 		964EE35536F610F97B5B555E3E78E225 /* URLRouter.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = URLRouter.podspec; sourceTree = "<group>"; tabWidth = 2; };
@@ -309,6 +315,9 @@
 				55E606F373CC3416381919DB4B29A17E /* NavigationControllerNavigator.swift */,
 				4CCEC04F233DD57C00CA86B5 /* TabBarControllerNavigator.swift */,
 				B17C051C180526E3846C8A490849BB95 /* Navigator.swift */,
+				884E84DF234EADC100BCC9D9 /* PushAction.swift */,
+				884E84E3234EADE200BCC9D9 /* PresentAction.swift */,
+				884E84E1234EADD000BCC9D9 /* ModalAction.swift */,
 				4C6E93B9234DB36900FC303A /* NavigatorDelegate.swift */,
 				884E84DB234EA93F00BCC9D9 /* UIViewController+TopMost.swift */,
 				4C1905AF2338C81200727CBA /* UIViewController+Routable.swift */,
@@ -500,6 +509,7 @@
 				263215E11D6C7C302722CDE6817D06A0 /* Navigator.swift in Sources */,
 				2FD6E652BAE50E8A98AB24AF47FC3015 /* Priority.swift in Sources */,
 				4CCEC054233E05B800CA86B5 /* StackType.swift in Sources */,
+				884E84E2234EADD000BCC9D9 /* ModalAction.swift in Sources */,
 				A16AD45912FD79E61CE3D3F3FA084A48 /* RegexReplaceHandler.swift in Sources */,
 				4C1905B02338C81200727CBA /* UIViewController+Routable.swift in Sources */,
 				88144701232C7B0300A27597 /* URLRouting+Handle.swift in Sources */,
@@ -507,7 +517,9 @@
 				4C6E93BA234DB36900FC303A /* NavigatorDelegate.swift in Sources */,
 				A8255A743BDBF8BA60A64F945BE653F3 /* Router.swift in Sources */,
 				4CCEC050233DD57C00CA86B5 /* TabBarControllerNavigator.swift in Sources */,
+				884E84E4234EADE200BCC9D9 /* PresentAction.swift in Sources */,
 				8FD00FA168FEE0A7F909B10B3B346DC4 /* URLConvertible.swift in Sources */,
+				884E84E0234EADC100BCC9D9 /* PushAction.swift in Sources */,
 				889E691A2349989700138346 /* URLRoutingOptionConverter.swift in Sources */,
 				257AB73A6568FBEFB0851EC6CFE1828A /* URLMapNode.swift in Sources */,
 				883B4296234811A80024AEFB /* RouterKey.swift in Sources */,

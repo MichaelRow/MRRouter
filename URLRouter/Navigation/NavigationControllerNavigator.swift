@@ -14,15 +14,23 @@ open class NavigationControllerNavigator: Navigator {
     public weak var rootNavigationController: UINavigationController?
             
     public var wrapperType: UINavigationController.Type
-        
-    public var navigatorViewController: UIViewController? { return rootNavigationController }
+            
+    private var pushAction: PushAction
+    
+    private var presentAction: PresentAction
     
     /// 初始化基于UINavigationController的跳转控制器
     /// - Parameter tabBarController: 跳转执行的NavigationController，如果不设值，则尝试用keyWindow根视图控制器
     /// - Parameter wrapperType: 模态弹出时用的包装导航控制器
-    public init(_ navigation: UINavigationController?, wrapperType: UINavigationController.Type = UINavigationController.self) {
-        self.rootNavigationController = navigation ?? UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
+    public init(_ navigation: UINavigationController? = nil, wrapperType: UINavigationController.Type = UINavigationController.self) {
         self.wrapperType = wrapperType
+        
+        rootNavigationController = navigation ?? UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
+        pushAction = PushAction()
+        presentAction = PresentAction()
+        
+        pushAction.delegate = self
+        presentAction.delegate = self
     }
     
     public func open(context: RoutingContext) {
@@ -42,181 +50,54 @@ open class NavigationControllerNavigator: Navigator {
         }
     }
 
+    public func present(context: RoutingContext) {
+        presentAction.present(on: rootNavigationController, context: context)
+    }
+    
     public func push(context: RoutingContext) {
-        
-        if let canNavigate = navigatorViewController?.topMost?.routable?.viewControllerCanNavigate(by: self, context: context), !canNavigate {
-            context.completion?(.rejectNavigate)
-            return
-        }
-        
-        dismissModalIfNeeded(context) {
-            // 先找到合适的导航栏控制器
-            guard let navigationController = context.option.contains(.useTopMostNavigation) ? self.navigatorViewController?.topMostNavigation : self.rootNavigationController
-            else {
-                context.completion?(.noNavigationController)
-                return
-            }
-            
-            self.dismissModal(for: navigationController, animated: !context.option.contains(.withoutDismissalAnimation)) {
-                // 根据优先级处理出入页面栈逻辑
-                let stackHandleResult = self.resolveStackType(for: navigationController, context: context)
-                var error: RouterError? = nil
-                
-                self.delegate?.navigator(self, willPush: stackHandleResult.stackType)
-                
-                switch stackHandleResult.stackType {
-                case .push:
-                    error = self.handlePush(context, navigationController: navigationController)
-                case .refreshParameters:
-                    error = self.handleRefreshParameter(context, navigationController: navigationController)
-                case .replace:
-                    error = self.handleReplace(context, navigationController: navigationController)
-                case .popThenInsert:
-                    error = self.handlePopThenInsert(context, navigationController: navigationController, popToIndex: stackHandleResult.popToIndex)
-                case .popThenReplace:
-                    error = self.handlePopThenReplace(context, navigationController: navigationController, popToIndex: stackHandleResult.popToIndex)
-                case .popThenRefreshParameters:
-                    error = self.handlePopThenRefreshParameters(context, navigationController: navigationController, popToIndex: stackHandleResult.popToIndex)
-                case .doNothing:
-                    error = .noAction
-                }
-                
-                context.completion?(error)
-                
-                self.delegate?.navigator(self, didPush: stackHandleResult.stackType)
-            }
-        }
+        pushAction.push(on: rootNavigationController, context: context)
     }
     
-    //MARK: - Push Handling
+}
+
+extension NavigationControllerNavigator: PushActionDelegate {
     
-    @discardableResult private func handlePush(_ context: RoutingContext, navigationController: UINavigationController) -> RouterError? {
-        guard let viewController = instantiateViewController(context) else { return .instantiateVCFailed }
-        navigationController.pushViewController(viewController, animated: !context.option.contains(.withoutAnimation))
-        return nil
+    func pushAction(_ action: PushAction, instantiatedViewControllerFor context: RoutingContext) -> UIViewController? {
+        return instantiateViewController(context)
     }
     
-    @discardableResult private func handleRefreshParameter(_ context: RoutingContext, navigationController: UINavigationController) -> RouterError? {
-        guard let targetVC = navigationController.topViewController else { return .getTopMostVCFailed }
-        targetVC.routable?.viewControllerWillUpdateParameters(by: self, context: context)
-        targetVC.routable?.parameters = context.params
-        targetVC.routable?.viewControllerDidUpdateParameters(by: self, context: context)
-        return nil
+    func pushAction(_ action: PushAction, willPush context: RoutingContext, stackType: StackType) {
+        delegate?.navigator(self, willPush: context, stackType: stackType)
     }
     
-    @discardableResult private func handleReplace(_ context: RoutingContext, navigationController: UINavigationController) -> RouterError? {
-        guard let viewController = instantiateViewController(context) else { return .instantiateVCFailed }
-        var stackVCs = navigationController.viewControllers
-        stackVCs.removeLast()
-        stackVCs.append(viewController)
-        navigationController.setViewControllers(stackVCs, animated: context.option.contains(.popReplaceAnimation))
-        return nil
+    func pushAction(_ action: PushAction, didPush context: RoutingContext, stackType: StackType) {
+        delegate?.navigator(self, didPush: context, stackType: stackType)
+        context.completion?(nil)
     }
     
-    @discardableResult private func handlePopThenInsert(_ context: RoutingContext, navigationController: UINavigationController, popToIndex index: Int?) -> RouterError? {
-        guard let index = index,
-              let viewController = instantiateViewController(context)
-        else { return .instantiateVCFailed }
-        
-        var stackVCs = navigationController.viewControllers[0...index]
-        stackVCs.append(viewController)
-        navigationController.setViewControllers(Array(stackVCs), animated: context.option.contains(.popReplaceAnimation))
-        return nil
+    func pushAction(_ action: PushAction, context: RoutingContext, failPresent error: RouterError) {
+        delegate?.navigator(self, failedPush: context, error: error)
+        context.completion?(error)
+    }
+}
+
+extension NavigationControllerNavigator: PresentActionDelegate {
+    
+    func presentAction(_ action: PresentAction, instantiatedViewControllerFor context: RoutingContext) -> UIViewController? {
+        return instantiateViewController(context)
     }
     
-    @discardableResult private func handlePopThenReplace(_ context: RoutingContext, navigationController: UINavigationController, popToIndex index: Int?) -> RouterError? {
-        guard let index = index,
-              let viewController = instantiateViewController(context)
-        else { return .instantiateVCFailed }
-        
-        var stackVCs = navigationController.viewControllers[0...index]
-        stackVCs.removeLast()
-        stackVCs.append(viewController)
-        navigationController.setViewControllers(Array(stackVCs), animated: context.option.contains(.popReplaceAnimation))
-        return nil
+    func presentAction(_ action: PresentAction, willPresent context: RoutingContext) {
+        delegate?.navigator(self, willPresent: context)
     }
     
-    @discardableResult private func handlePopThenRefreshParameters(_ context: RoutingContext, navigationController: UINavigationController, popToIndex index: Int?) -> RouterError? {
-        guard let index = index else { return .noStackPopDestinationIndex }
-        let stackVCs = navigationController.viewControllers[0...index]
-        guard let lastVC = stackVCs.last else { return .noVCInStack }
-        lastVC.routable?.viewControllerWillUpdateParameters(by: self, context: context)
-        lastVC.routable?.parameters = context.params
-        lastVC.routable?.viewControllerDidUpdateParameters(by: self, context: context)
-        navigationController.setViewControllers(Array(stackVCs), animated: context.option.contains(.popReplaceAnimation))
-        return nil
+    func presentAction(_ action: PresentAction, didPresent context: RoutingContext) {
+        delegate?.navigator(self, didPresent: context)
+        context.completion?(nil)
     }
     
-    //MARK: - Stack Handling
-    
-    private func resolveStackType(for navigationController: UINavigationController, context: RoutingContext) -> (stackType: StackType, popToIndex: Int?) {
-        //不需要考虑栈等级
-        guard !context.option.contains(.ignoreLevel) else { return (.push, nil) }
-        
-        let stackVCs = navigationController.viewControllers
-        //没有栈顶VC的异常情况
-        guard let lastVC = stackVCs.last else { return (.doNothing, nil) }
-        
-        let lastVCType = type(of: lastVC)
-        // 无法比较栈等级的情况直接压栈
-        guard let newVCLevel = context.viewControllerType?.routable?.stackLevel,
-              let lastVCLevel = lastVCType.routable?.stackLevel
-        else {
-            return (.push, nil)
-        }
-        
-        var stackType = StackType.doNothing
-        var popToIndex: Int? = nil
-        
-        if newVCLevel > lastVCLevel {
-            stackType = .push
-        } else if newVCLevel == lastVCLevel {
-            //如果是同样的VC，只替换VC参数
-            if context.viewControllerType == lastVCType {
-                stackType = .refreshParameters
-            } else {
-                stackType = .replace
-            }
-        } else {
-            //如果Navi只有一个VC，那么直接替换
-            guard stackVCs.count >= 2 else {
-                return (.replace, nil)
-            }
-            
-            //已经判断过栈顶，从倒数第二个开始查找
-            for index in (0 ..< stackVCs.count - 1).reversed() {
-                
-                let currentNode = stackVCs[index]
-                let currentVCType = type(of: currentNode)
-                
-                //无法比较栈等级，替换该VC前面的VC
-                guard let currentLevel = currentVCType.routable?.stackLevel else {
-                    return (.popThenInsert, index)
-                }
-                
-                if newVCLevel > currentLevel {
-                    stackType = .popThenInsert
-                    popToIndex = index
-                    break
-                } else if newVCLevel == currentLevel {
-                    //如果是同样的VC，只替换VC参数
-                    if context.viewControllerType == currentVCType {
-                        stackType = .popThenRefreshParameters
-                    } else {
-                        stackType = .popThenReplace
-                    }
-                    popToIndex = index
-                    break
-                }
-                //到了尽头没找到符合条件的栈，替换整个Navi堆栈
-                if index == 0 {
-                    stackType = .popThenReplace
-                    popToIndex = 0
-                }
-            }
-        }
-        
-        return (stackType, popToIndex)
+    func presentAction(_ action: PresentAction, context: RoutingContext, failPresent error: RouterError) {
+        delegate?.navigator(self, failedPresent: context, error: error)
+        context.completion?(error)
     }
-    
 }

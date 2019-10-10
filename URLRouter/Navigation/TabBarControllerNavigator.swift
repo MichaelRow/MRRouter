@@ -8,31 +8,34 @@
 import UIKit
 
 open class TabBarControllerNavigator: Navigator {
-    
-    //TODO: 这种嵌套的代码复用方式不太合适
-    private var navigationControllerNavigator: NavigationControllerNavigator
-    
+        
     public weak var delegate: NavigatorDelegate?
     
     public weak var rootTabBarController: UITabBarController?
         
     public var wrapperType: UINavigationController.Type
+        
+    private var pushAction: PushAction
     
-    public var navigatorViewController: UIViewController? { return rootTabBarController }
+    private var presentAction: PresentAction
     
     /// 初始化基于UITabBarController的跳转控制器
     /// - Parameter tabBarController: 跳转执行的TabBarController，如果不设值，则尝试用keyWindow根视图控制器
     /// - Parameter wrapperType: 模态弹出时用的包装导航控制器
     public init(_ tabBarController: UITabBarController? = nil, wrapperType: UINavigationController.Type = UINavigationController.self) {
-        self.rootTabBarController = tabBarController ?? UIApplication.shared.keyWindow?.rootViewController as? UITabBarController
         self.wrapperType = wrapperType
-        self.navigationControllerNavigator = NavigationControllerNavigator(nil, wrapperType: wrapperType)
-        self.navigationControllerNavigator.delegate = self
+        
+        rootTabBarController = tabBarController ?? UIApplication.shared.keyWindow?.rootViewController as? UITabBarController
+        pushAction = PushAction()
+        presentAction = PresentAction()
+        
+        pushAction.delegate = self
+        presentAction.delegate = self
     }
     
     public func open(context: RoutingContext) {
         guard context.viewControllerType != nil,
-              navigatorViewController != nil
+              rootTabBarController != nil
         else {
             context.completion?(.essitialCheckFail)
             return
@@ -48,7 +51,7 @@ open class TabBarControllerNavigator: Navigator {
     
     public func push(context: RoutingContext) {
         
-        if let canNavigate = navigatorViewController?.topMost?.routable?.viewControllerCanNavigate(by: self, context: context), !canNavigate {
+        if let canNavigate = rootTabBarController?.topMost?.routable?.viewControllerCanNavigate(with: context), !canNavigate {
             context.completion?(.rejectNavigate)
             return
         }
@@ -69,28 +72,56 @@ open class TabBarControllerNavigator: Navigator {
             return
         }
         
-        if toIndex == tabBarController.selectedIndex {
-            navigationControllerNavigator.rootNavigationController = navigationController
-            navigationControllerNavigator.open(context: context)
-        } else {
-            dismissModal(context)
+        if toIndex != tabBarController.selectedIndex {
+            ModalAction.dismissModal(for: navigationController, context: context)
             rootTabBarController?.selectedIndex = toIndex
-            navigationControllerNavigator.rootNavigationController = navigationController
-            navigationControllerNavigator.open(context: context)
         }
+        pushAction.push(on: navigationController, context: context)
+    }
+    
+    public func present(context: RoutingContext) {
+        presentAction.present(on: rootTabBarController, context: context)
     }
 }
 
-extension TabBarControllerNavigator: NavigatorDelegate {
+extension TabBarControllerNavigator: PushActionDelegate {
     
-    public func navigator(_ navigator: Navigator, willPresent context: RoutingContext) {}
-    public func navigator(_ navigator: Navigator, didPresent context: RoutingContext) {}
-    
-    public func navigator(_ navigator: Navigator, willPush stackType: StackType) {
-        delegate?.navigator(navigator, willPush: stackType)
+    func pushAction(_ action: PushAction, instantiatedViewControllerFor context: RoutingContext) -> UIViewController? {
+        return instantiateViewController(context)
     }
     
-    public func navigator(_ navigator: Navigator, didPush stackType: StackType) {
-        delegate?.navigator(navigator, didPush: stackType)
+    func pushAction(_ action: PushAction, willPush context: RoutingContext, stackType: StackType) {
+        delegate?.navigator(self, willPush: context, stackType: stackType)
+    }
+    
+    func pushAction(_ action: PushAction, didPush context: RoutingContext, stackType: StackType) {
+        delegate?.navigator(self, didPush: context, stackType: stackType)
+        context.completion?(nil)
+    }
+    
+    func pushAction(_ action: PushAction, context: RoutingContext, failPresent error: RouterError) {
+        delegate?.navigator(self, failedPush: context, error: error)
+        context.completion?(error)
+    }
+}
+
+extension TabBarControllerNavigator: PresentActionDelegate {
+    
+    func presentAction(_ action: PresentAction, instantiatedViewControllerFor context: RoutingContext) -> UIViewController? {
+        return instantiateViewController(context)
+    }
+    
+    func presentAction(_ action: PresentAction, willPresent context: RoutingContext) {
+        delegate?.navigator(self, willPresent: context)
+    }
+    
+    func presentAction(_ action: PresentAction, didPresent context: RoutingContext) {
+        delegate?.navigator(self, didPresent: context)
+        context.completion?(nil)
+    }
+    
+    func presentAction(_ action: PresentAction, context: RoutingContext, failPresent error: RouterError) {
+        delegate?.navigator(self, failedPresent: context, error: error)
+        context.completion?(error)
     }
 }

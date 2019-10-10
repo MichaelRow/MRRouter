@@ -7,6 +7,7 @@
 
 import UIKit
 
+@dynamicMemberLookup
 open class Router {
         
     public lazy var matcher: URLMatcher.Type = GeneralURLMatcher.self
@@ -48,5 +49,12 @@ open class Router {
     public func unregister(pattern: URLConvertible, removeGrandchild: Bool = false) {
         guard let matchedResult = matcher.match(pattern: pattern, with: rootNode) else { return }
         matchedResult.matchedNode.parentNode?.remove(child: matchedResult.matchedNode.nodePattern, removeGrandchild: removeGrandchild)
+    }
+}
+
+extension Router {
+    subscript(dynamicMember keyPath: WritableKeyPath<Navigator,NavigatorDelegate?>) -> NavigatorDelegate? {
+        get { navigator[keyPath: keyPath] }
+        set { navigator[keyPath: keyPath] = newValue }
     }
 }
