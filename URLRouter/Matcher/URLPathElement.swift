@@ -15,6 +15,8 @@ extension URLPathElement: RawRepresentable {
     
     public typealias RawValue = String
     
+    public static var root: URLPathElement { .path("") }
+    
     public var pathElement: String {
         switch self {
         case .path(let element):

@@ -22,16 +22,16 @@ open class URLMapNode {
     public private(set) var placeholderKeys = Set<URLPathElement>()
     
     public var fullPattern: URLConvertible {
-        var parentNode = self.parentNode
+        var parentNode: URLMapNode? = self
         var allNode = [URLMapNode]()
-        while let currentNode = parentNode {
+        while let currentNode = parentNode, currentNode.nodePattern != .root {
             allNode.append(currentNode)
             parentNode = currentNode.parentNode
         }
-        return allNode.reduce(""){ $0 + $1.nodePattern.rawValue + "/" }.normalizedURL
+        return allNode.reversed().reduce(""){ $0 + $1.nodePattern.rawValue + "/" }.normalizedURL
     }
     
-    public init(pattern: URLPathElement = .path(""), viewControllerType: UIViewController.Type? = nil, routing: URLRouting? = nil) {
+    public init(pattern: URLPathElement = .root, viewControllerType: UIViewController.Type? = nil, routing: URLRouting? = nil) {
         self.nodePattern = pattern
         self.viewControllerType = viewControllerType
         self.routing = routing
