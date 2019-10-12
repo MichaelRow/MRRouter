@@ -7,27 +7,22 @@
 
 public extension URLRouting {
         
-    func handle(_ context: RoutingContext) {
+    func handle(_ context: RoutingContext, completion:(RoutingContext, RouterError?) -> Void) {
         guard handleResolvers(context) else {
-            context.completion?(.resolveFailed)
+            completion(context, .resolveFailed)
             return
         }
         
         handleAsyncHandlers(context) { success in
             guard success else {
-                context.completion?(.asyncResolveFailed)
+                completion(context, .asyncResolveFailed)
                 return
             }
             
             if handleRedirectors(context) {
-                return
+                completion(context, .redirection)
             } else {
-                
-                if let navigationHandler = navigationHandler {
-                    navigationHandler(context)
-                } else {
-                    nestRouter?.navigator.open(context: context)
-                }
+                completion(context, nil)
             }
         }
     }

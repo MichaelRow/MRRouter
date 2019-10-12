@@ -18,4 +18,5 @@ public enum RouterError: String, Error {
     case getTopMostVCFailed = "无法获取最上层的VC"
     case noStackPopDestinationIndex = "没有需要弹栈的下标"
     case noVCInStack = "没有VC在NavigationController的页面栈中"
+    case redirection = "发生重定向"
 }

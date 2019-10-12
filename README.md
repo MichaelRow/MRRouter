@@ -4,16 +4,13 @@
 
 ## How to Use
 
-#### For a NavigationController-base app
-
-1. Set the routing object for the router.
+1. Use the Router singleton.
 
    ```swi
-   // get your root navigation controller here
-   guard let navi = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController else { return }
+   let router = Router.shared
    
-   let naviNavigator = NavigationControllerNavigator(navi)
-   let router = Router(naviNavigator)
+   //you'd better set the nest window to prevent no navigating.
+   router.nestWindow = YOUR_APP_MAIN_WINDOW
    ```
    
 2. Register view controllers.
@@ -63,25 +60,6 @@
    // you can present and wrap the VC in a navigation controller by adding the option
    router.present(url: "router://user/MichaelRow", option: [.wrapInNavigation])
    ```
-
-#### For a TabBarController-base app
-
-Just change the navigator type. 
-
-```swif
-guard let tabBarVC = UIApplication.shared.keyWindow?.rootViewController as? UITabBarController else { return }
-
-let tabBarNavigator = TabBarControllerNavigator(tabBarVC)
-let router = Router(tabBarNavigator)
-```
-
-By the way, you can push your VC on any tab.
-
-```sw
-router.push(url: "router://general", tabbarIndex: 2)
-```
-
-
 
 ## Example Project
 

@@ -7,8 +7,7 @@
 //
 
 import UIKit
-
-var sharedDebugMapper: DebugMapper!
+import URLRouter
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -43,7 +42,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.makeKeyAndVisible()
         self.window = window
         
-        sharedDebugMapper = DebugMapper(naviVC: naviVC, tabBarVC: tabBarVC)
+        DebugMapper.shared.registerURLs()
+        Router.shared.nestWindow = window
         
         debugWindow = DebugWindow(frame: UIScreen.main.bounds)
         debugWindow?.makeKeyAndVisible()
@@ -54,7 +54,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     @objc func switchAppearance(_ n: Notification) {
-        sharedDebugMapper.switchRouter()
         guard let rootVC = window?.rootViewController else { return }
         if rootVC.isKind(of: UINavigationController.self) {
             window?.rootViewController = tabBarVC

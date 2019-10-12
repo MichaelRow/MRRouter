@@ -10,41 +10,17 @@ import UIKit
 import URLRouter
 
 class DebugMapper {
-            
-    var naviRouter: Router
-    var tabBarRouter: Router
-    var selectedRouter: Router
-    
-    init(naviVC: UINavigationController, tabBarVC: UITabBarController) {        
-        let naviNavigator = NavigationControllerNavigator(naviVC)
-        naviRouter = Router(naviNavigator)
-        
-        let tabBarNavigator = TabBarControllerNavigator(tabBarVC)
-        tabBarRouter = Router(tabBarNavigator)
-        
-        selectedRouter = naviRouter
-        
-        registerURLs()
-    }
+                
+    static let shared = DebugMapper()
     
     func registerURLs() {
-        for router in [naviRouter,tabBarRouter] {
-            router.register(pattern: "routerA://title", viewControllerType: TitleViewController.self)
-            router.register(pattern: "routerA://general/setting", viewControllerType: SettingVC.self)
-            router.register(pattern: "routerA://general/zone", viewControllerType: ZoneVC.self)
-            router.register(pattern: "routerA://general/<AnyParams>", viewControllerType: AnyParamsVC.self)
-            router.register(pattern: "routerB://title", viewControllerType: TitleViewController.self)
-            router.register(pattern: "routerC://news", viewControllerType: NewsVC.self)
-            router.register(pattern: "routerC://kline", viewControllerType: KLineVC.self)
-        }
-    }
-    
-    func switchRouter() {
-        if selectedRouter === naviRouter {
-            selectedRouter = tabBarRouter
-        } else {
-            selectedRouter = naviRouter
-        }
+        Router.shared.register(pattern: "routerA://title", viewControllerType: TitleViewController.self)
+        Router.shared.register(pattern: "routerA://general/setting", viewControllerType: SettingVC.self)
+        Router.shared.register(pattern: "routerA://general/zone", viewControllerType: ZoneVC.self)
+        Router.shared.register(pattern: "routerA://general/<AnyParams>", viewControllerType: AnyParamsVC.self)
+        Router.shared.register(pattern: "routerB://title", viewControllerType: TitleViewController.self)
+        Router.shared.register(pattern: "routerC://news", viewControllerType: NewsVC.self)
+        Router.shared.register(pattern: "routerC://kline", viewControllerType: KLineVC.self)
     }
     
     var navigateActions: [NavigateActionModel] = {

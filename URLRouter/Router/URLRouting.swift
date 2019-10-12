@@ -12,9 +12,6 @@ public struct URLRouting {
     public private(set) var redirectors = [URLRedirectionHandler]()
     
     public private(set) var asyncHandlers = [URLParameterAsyncHandler]()
-
-    /// 使用跳转闭包页面跳转，不通过Router.navigator方式
-    public var navigationHandler: ((RoutingContext) -> Void)?
     
     public weak var nestRouter: Router?
     

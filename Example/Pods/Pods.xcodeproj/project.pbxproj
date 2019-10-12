@@ -12,12 +12,11 @@
 		257AB73A6568FBEFB0851EC6CFE1828A /* URLMapNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C39FAE05FB945BFBD068A40D6AE848C /* URLMapNode.swift */; };
 		263215E11D6C7C302722CDE6817D06A0 /* Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B17C051C180526E3846C8A490849BB95 /* Navigator.swift */; };
 		2FD6E652BAE50E8A98AB24AF47FC3015 /* Priority.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8C28DEED45C41137FE815FB4B0FF9C /* Priority.swift */; };
-		304FB894466201DBB1D88C350CC4055C /* NavigationControllerNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E606F373CC3416381919DB4B29A17E /* NavigationControllerNavigator.swift */; };
 		33914A98A6BAF79FF2B9DE88FD0BA125 /* URLRouting.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF1F729E749A7A059AB4656F1C0BBA9E /* URLRouting.swift */; };
 		3FF6F88E431722CC21D898FE16459AD9 /* Pods-URLRouter_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = D1B178BF753060FB11145D53EB21A017 /* Pods-URLRouter_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C0FD8712351BDEA00CBFDDC /* GeneralNaigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0FD8702351BDEA00CBFDDC /* GeneralNaigator.swift */; };
 		4C1905B02338C81200727CBA /* UIViewController+Routable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1905AF2338C81200727CBA /* UIViewController+Routable.swift */; };
 		4C6E93BA234DB36900FC303A /* NavigatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6E93B9234DB36900FC303A /* NavigatorDelegate.swift */; };
-		4CCEC050233DD57C00CA86B5 /* TabBarControllerNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCEC04F233DD57C00CA86B5 /* TabBarControllerNavigator.swift */; };
 		4CCEC054233E05B800CA86B5 /* StackType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCEC053233E05B800CA86B5 /* StackType.swift */; };
 		503363D037947A27DC271123D6C79C76 /* RoutingOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBCDAAE72639332ACC16EA58628337C /* RoutingOption.swift */; };
 		603986CEEE0E56C095D1C35B78675E5B /* URLRouter-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A6E58F5B0F519CD99DE0D7F3B7049C4 /* URLRouter-dummy.m */; };
@@ -81,11 +80,10 @@
 		3C8C28DEED45C41137FE815FB4B0FF9C /* Priority.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Priority.swift; sourceTree = "<group>"; };
 		43A8F3D1803CCCF4DF309F7A4150B949 /* Pods-URLRouter_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-URLRouter_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		4AFC884AE8293765681829C63D506A7B /* URLRouter-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "URLRouter-umbrella.h"; sourceTree = "<group>"; };
+		4C0FD8702351BDEA00CBFDDC /* GeneralNaigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralNaigator.swift; sourceTree = "<group>"; };
 		4C1905AF2338C81200727CBA /* UIViewController+Routable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Routable.swift"; sourceTree = "<group>"; };
 		4C6E93B9234DB36900FC303A /* NavigatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorDelegate.swift; sourceTree = "<group>"; };
-		4CCEC04F233DD57C00CA86B5 /* TabBarControllerNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarControllerNavigator.swift; sourceTree = "<group>"; };
 		4CCEC053233E05B800CA86B5 /* StackType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackType.swift; sourceTree = "<group>"; };
-		55E606F373CC3416381919DB4B29A17E /* NavigationControllerNavigator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NavigationControllerNavigator.swift; sourceTree = "<group>"; };
 		5903CCE56E89089594C7A5EE56CAF5E4 /* Pods-URLRouter_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-URLRouter_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		5C691B373B9EDF50F9F852443FCC51AA /* Router.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		76AE2E50312466E9B2FF1F2BF7CCF283 /* Pods-URLRouter_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-URLRouter_Tests-Info.plist"; sourceTree = "<group>"; };
@@ -312,9 +310,8 @@
 		E8595FA4F24735D084EA06333763DC44 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
-				55E606F373CC3416381919DB4B29A17E /* NavigationControllerNavigator.swift */,
-				4CCEC04F233DD57C00CA86B5 /* TabBarControllerNavigator.swift */,
 				B17C051C180526E3846C8A490849BB95 /* Navigator.swift */,
+				4C0FD8702351BDEA00CBFDDC /* GeneralNaigator.swift */,
 				884E84DF234EADC100BCC9D9 /* PushAction.swift */,
 				884E84E3234EADE200BCC9D9 /* PresentAction.swift */,
 				884E84E1234EADD000BCC9D9 /* ModalAction.swift */,
@@ -504,7 +501,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				304FB894466201DBB1D88C350CC4055C /* NavigationControllerNavigator.swift in Sources */,
 				A8A21614C5274C3776918C99CD19FE8F /* GeneralURLMatcher.swift in Sources */,
 				263215E11D6C7C302722CDE6817D06A0 /* Navigator.swift in Sources */,
 				2FD6E652BAE50E8A98AB24AF47FC3015 /* Priority.swift in Sources */,
@@ -514,9 +510,9 @@
 				4C1905B02338C81200727CBA /* UIViewController+Routable.swift in Sources */,
 				88144701232C7B0300A27597 /* URLRouting+Handle.swift in Sources */,
 				81221F65188DBE4752F3C910FE1B9F81 /* Router+Navigation.swift in Sources */,
+				4C0FD8712351BDEA00CBFDDC /* GeneralNaigator.swift in Sources */,
 				4C6E93BA234DB36900FC303A /* NavigatorDelegate.swift in Sources */,
 				A8255A743BDBF8BA60A64F945BE653F3 /* Router.swift in Sources */,
-				4CCEC050233DD57C00CA86B5 /* TabBarControllerNavigator.swift in Sources */,
 				884E84E4234EADE200BCC9D9 /* PresentAction.swift in Sources */,
 				8FD00FA168FEE0A7F909B10B3B346DC4 /* URLConvertible.swift in Sources */,
 				884E84E0234EADC100BCC9D9 /* PushAction.swift in Sources */,

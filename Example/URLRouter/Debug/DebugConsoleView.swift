@@ -104,7 +104,7 @@ class DebugConsoleView: UIView {
         guard let selectedRows = tableView.indexPathsForSelectedRows else { return [] }
         var option = RoutingOption()
         for row in selectedRows {
-            option.insert(sharedDebugMapper.navigateActions[row.row].option)
+            option.insert(DebugMapper.shared.navigateActions[row.row].option)
         }
         return option
     }
@@ -114,13 +114,13 @@ class DebugConsoleView: UIView {
     @objc func pushAction(_ sender: UIButton) {
         guard let url = textField.text else { return }
         let tabIndex = Int(tabTextField.text ?? "")
-        sharedDebugMapper.selectedRouter.push(url: url, parameters: [:], option: optionInTableView(), tabbarIndex: tabIndex, completion: nil)
+        Router.shared.push(url: url, parameters: [:], option: optionInTableView(), tabbarIndex: tabIndex, completion: nil)
     }
     
     @objc func presentAction(_ sender: UIButton) {
         guard let url = textField.text else { return }
         let tabIndex = Int(tabTextField.text ?? "")
-        sharedDebugMapper.selectedRouter.present(url: url, parameters: [:], option: optionInTableView(), tabbarIndex: tabIndex, completion: nil)
+        Router.shared.present(url: url, parameters: [:], option: optionInTableView(), tabbarIndex: tabIndex, completion: nil)
     }
     
     @objc func switchAction(_ sender: UIButton) {
@@ -142,13 +142,13 @@ extension DebugConsoleView: UITableViewDelegate {
 extension DebugConsoleView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sharedDebugMapper.navigateActions.count
+        return DebugMapper.shared.navigateActions.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: reuseID)
-        guard indexPath.row < sharedDebugMapper.navigateActions.count else { return cell }
-        cell.textLabel?.text = sharedDebugMapper.navigateActions[indexPath.row].name
+        guard indexPath.row < DebugMapper.shared.navigateActions.count else { return cell }
+        cell.textLabel?.text = DebugMapper.shared.navigateActions[indexPath.row].name
         return cell
     }
 }
