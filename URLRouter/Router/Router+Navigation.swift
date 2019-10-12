@@ -9,6 +9,11 @@ import Foundation
 
 public extension Router {
     
+    /// 是否有注册当前URL
+    func canOpen(url: URLConvertible) -> Bool {
+        return matcher.match(pattern: url, with: rootNode)?.matchedNode.routing != nil
+    }
+    
     func push(url: URLConvertible, parameters: [String : Any]? = nil, option: RoutingOption = [], tabbarIndex: Int? = nil, completion: RouterCompletion? = nil) {
         let opt = option.union(.push).subtracting(.present)
         open(url: url, parameters: parameters, option: opt, tabbarIndex: tabbarIndex, completion: completion)
@@ -31,5 +36,10 @@ public extension Router {
         } else {
             completion?(.noRouting)
         }
+    }
+    
+    /// 获得注册在Router中的VC类型
+    func registeredViewController(for url: URLConvertible) -> UIViewController.Type? {
+        return matcher.match(pattern: url, with: rootNode)?.matchedNode.viewControllerType
     }
 }
