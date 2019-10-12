@@ -24,7 +24,7 @@ public extension URLRouting {
             } else {
                 
                 if let navigationHandler = navigationHandler {
-                    navigationHandler()
+                    navigationHandler(context)
                 } else {
                     nestRouter?.navigator.open(context: context)
                 }
