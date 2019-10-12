@@ -10,7 +10,7 @@ open class Router {
         
     public static let shared = Router()
     
-    public lazy var matcher: URLMatcher.Type = GeneralURLMatcher.self
+    public lazy var matcher: URLMatcher = GeneralURLMatcher()
     
     public lazy var navigator: Navigator = GeneralNaigator()
     

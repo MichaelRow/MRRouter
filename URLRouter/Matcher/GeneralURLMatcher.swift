@@ -9,13 +9,13 @@ public typealias URLMatchResult = (matchedNode: URLMapNode, placeholders: [Strin
 
 public protocol URLMatcher {
     
-    static func match(pattern: URLConvertible, with map: URLMapNode) -> URLMatchResult?
+    func match(pattern: URLConvertible, with map: URLMapNode) -> URLMatchResult?
     
 }
 
 public struct GeneralURLMatcher: URLMatcher {
     
-    public static func match(pattern: URLConvertible, with map: URLMapNode) -> URLMatchResult? {
+    public func match(pattern: URLConvertible, with map: URLMapNode) -> URLMatchResult? {
         guard let patternComponents = pattern.pathElement,
               let matchedResult = match(components: patternComponents, form: 0, with: map, placeholders: [:])
         else { return nil }
@@ -23,7 +23,7 @@ public struct GeneralURLMatcher: URLMatcher {
         return matchedResult
     }
     
-    private static func match(components: [URLPathElement], form startIndex: Int, with node: URLMapNode, placeholders: [String : String]) -> URLMatchResult? {
+    private func match(components: [URLPathElement], form startIndex: Int, with node: URLMapNode, placeholders: [String : String]) -> URLMatchResult? {
         guard startIndex < components.count else { return nil }
         let component = components[startIndex]
         
@@ -52,5 +52,5 @@ public struct GeneralURLMatcher: URLMatcher {
         return nil
     }
     
-    private init() {}
+    public init() {}
 }
