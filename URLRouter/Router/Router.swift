@@ -14,7 +14,11 @@ open class Router {
     
     public lazy var navigator: Navigator = GeneralNaigator()
     
-    private(set) var rootNode = URLMapNode()
+    public internal(set) var rootNode = URLMapNode()
+    
+    public internal(set) var businessInstantiators = [String : () -> Any]()
+    
+    public internal(set) var businessSingletons = [String : Any]()
         
     public var wildcardRouting: URLRouting {
         didSet {
