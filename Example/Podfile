@@ -1,5 +1,7 @@
 use_frameworks!
 
+source 'git@code.aliyun.com:szfy_ios/SZFYSpecs.git'
+
 target 'URLRouter_Example' do
   pod 'URLRouter', :path => '../'
 

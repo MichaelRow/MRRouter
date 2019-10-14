@@ -1,16 +1,23 @@
 PODS:
-  - URLRouter (0.1.0)
+  - StormUtil (0.1.0)
+  - URLRouter (0.1.0):
+    - StormUtil
 
 DEPENDENCIES:
   - URLRouter (from `../`)
+
+SPEC REPOS:
+  "git@code.aliyun.com:szfy_ios/SZFYSpecs.git":
+    - StormUtil
 
 EXTERNAL SOURCES:
   URLRouter:
     :path: "../"
 
 SPEC CHECKSUMS:
-  URLRouter: 0e71e09ba9abb54f140f5db6a8a9add11fbf875b
+  StormUtil: 1b472c07eb17c3ca404da38f1eca90a84e2f26f6
+  URLRouter: 9189c93fd10625ced5b71b538f239d35ee0c2107
 
-PODFILE CHECKSUM: 65f5d18f0d5d42ca495d05393594f1a9f08d7282
+PODFILE CHECKSUM: cf8139ef948f7a50dd08950de5165323ab4d7b2c
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.8.3

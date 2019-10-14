@@ -52,7 +52,7 @@
 		9A9C4663BAE6E31E8F12F754 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		AFF18F9739CD52E4D4668781 /* Pods-URLRouter_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-URLRouter_Example.debug.xcconfig"; path = "Target Support Files/Pods-URLRouter_Example/Pods-URLRouter_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		B47C39B6E7075894F0C837F3 /* Pods-URLRouter_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-URLRouter_Example.release.xcconfig"; path = "Target Support Files/Pods-URLRouter_Example/Pods-URLRouter_Example.release.xcconfig"; sourceTree = "<group>"; };
-		B88F76469B1F2145FB0242C1 /* URLRouter.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = URLRouter.podspec; path = ../URLRouter.podspec; sourceTree = "<group>"; };
+		B88F76469B1F2145FB0242C1 /* URLRouter.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = URLRouter.podspec; path = ../URLRouter.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		CD14FD08E82D7E80FE82534D /* Pods_URLRouter_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_URLRouter_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF7E473B0685467988279216 /* Pods_URLRouter_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_URLRouter_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8573C3D9E100C500B745161 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -344,10 +344,12 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-URLRouter_Example/Pods-URLRouter_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/StormUtil/StormUtil.framework",
 				"${BUILT_PRODUCTS_DIR}/URLRouter/URLRouter.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/StormUtil.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URLRouter.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

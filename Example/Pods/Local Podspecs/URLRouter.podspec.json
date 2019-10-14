@@ -18,5 +18,12 @@
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "URLRouter/**/*"
+  "swift_versions": "5.0",
+  "source_files": "URLRouter/**/*",
+  "dependencies": {
+    "StormUtil": [
+
+    ]
+  },
+  "swift_version": "5.0"
 }
