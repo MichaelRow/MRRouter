@@ -14,6 +14,8 @@ open class URLMapNode {
     public var viewControllerType: UIViewController.Type?
     
     public var routing: URLRouting?
+    
+    public var tabBarIndex: Int?
         
     public private(set) weak var parentNode: URLMapNode?
     
@@ -31,19 +33,21 @@ open class URLMapNode {
         return allNode.reversed().reduce(""){ $0 + $1.nodePattern.rawValue + "/" }.normalizedURL
     }
     
-    public init(pattern: URLPathElement = .root, viewControllerType: UIViewController.Type? = nil, routing: URLRouting? = nil) {
+    public init(pattern: URLPathElement = .root, viewControllerType: UIViewController.Type? = nil, routing: URLRouting? = nil, tabBarIndex: Int? = nil) {
         self.nodePattern = pattern
         self.viewControllerType = viewControllerType
         self.routing = routing
+        self.tabBarIndex = tabBarIndex
     }
     
-    public func add(child pattern: URLPathElement, viewControllerType: UIViewController.Type? = nil, routing: URLRouting? = nil, override: Bool = true) {
+    public func add(child pattern: URLPathElement, viewControllerType: UIViewController.Type? = nil, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
         if let node = self[pattern] {
             guard override else { return }
             node.viewControllerType = viewControllerType
             node.routing = routing
+            node.tabBarIndex = tabBarIndex
         } else {
-            let node = URLMapNode(pattern: pattern, viewControllerType: viewControllerType, routing: routing)
+            let node = URLMapNode(pattern: pattern, viewControllerType: viewControllerType, routing: routing, tabBarIndex: tabBarIndex)
             node.parentNode = self
             childNodes[pattern] = node
         }
