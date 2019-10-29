@@ -9,7 +9,7 @@ import UIKit
 
 public typealias RouterCompletion = (RouterError?) -> Void
 
-open class RoutingContext {
+@objc open class RoutingContext: NSObject {
     
     public private(set) var originalURL: URLConvertible
     
@@ -37,9 +37,11 @@ open class RoutingContext {
         self.params = self.placeholders
         self.params.merge(originalURL.queryParameters, uniquingKeysWith: { (_, new) in new })
         self.params.merge(self.originalParams, uniquingKeysWith: { (_, new) in new })
-        self[.original] = self.originalParams
-        self[.placeHolders] = self.placeholders
-        self[.query] = originalURL.queryParameters
+        self.params[.original] = self.originalParams
+        self.params[.placeHolders] = self.placeholders
+        self.params[.query] = originalURL.queryParameters
+        
+        super.init()
     }
     
     public func instantiateViewController() -> UIViewController? {
