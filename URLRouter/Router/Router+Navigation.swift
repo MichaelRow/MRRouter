@@ -51,6 +51,10 @@ public extension Router {
         return matcher.match(pattern: url, with: rootNode)?.matchedNode.viewControllerType
     }
     
+    func back(_ useTopMost: Bool, animated: Bool) {
+        navigator.back(useTopMost, animated: animated)
+    }
+    
     func push(url: URLConvertible, parameters: [String : Any]? = nil, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
         let opt = option.union(.push).subtracting(.present)
         open(url: url, parameters: parameters, option: opt, tabBarOpenType: tabBarOpenType, completion: completion)

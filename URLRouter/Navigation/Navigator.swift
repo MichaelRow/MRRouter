@@ -17,6 +17,8 @@ public protocol Navigator: class {
     /// 模态弹出时用的包装导航控制器
     var wrapperType: UINavigationController.Type { get set }
     
+    func back(_ useTopMost: Bool, animated: Bool)
+    
     func open(context: RoutingContext)
     
     func present(context: RoutingContext)

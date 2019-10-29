@@ -32,6 +32,10 @@ open class GeneralNaigator: Navigator {
         presentAction.delegate = self
     }
     
+    public func back(_ useTopMost: Bool, animated: Bool) {
+        BackAction.back(on: window?.rootViewController, useTopMost: useTopMost, animated: animated)
+    }
+    
     public func open(context: RoutingContext) {
         guard context.viewControllerType != nil else {
             context.completion?(.essitialCheckFail)
