@@ -32,6 +32,7 @@ TODO: Add long description of the pod here.
   s.swift_versions = '5.0'
   s.source_files = 'URLRouter/**/*'
   s.dependency 'StormUtil'
+  s.dependency 'Protocol'
   
   # s.resource_bundles = {
   #   'URLRouter' => ['URLRouter/Assets/*.png']

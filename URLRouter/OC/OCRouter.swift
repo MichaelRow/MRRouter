@@ -10,7 +10,8 @@ import Foundation
 /// 提供给OC简单跳转的接口
 @objc public class OCRouter: NSObject {
     
-    @objc func register(pattern: String, viewControllerType: UIViewController.Type) {
+    /// 使用符合RoutableViewController的VC注册路由
+    @objc func register(pattern: String, viewControllerType: (UIViewController & RoutableViewController).Type) {
         Router.shared.register(pattern: pattern, viewControllerType: viewControllerType)
     }
     

@@ -344,11 +344,13 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-URLRouter_Example/Pods-URLRouter_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Protocol/Protocol.framework",
 				"${BUILT_PRODUCTS_DIR}/StormUtil/StormUtil.framework",
 				"${BUILT_PRODUCTS_DIR}/URLRouter/URLRouter.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protocol.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/StormUtil.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URLRouter.framework",
 			);

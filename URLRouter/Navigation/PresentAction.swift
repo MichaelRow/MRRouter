@@ -24,7 +24,9 @@ class PresentAction {
             return
         }
         
-        if let canNavigate = viewController.topMost?.routable?.viewControllerCanNavigate(with: context), !canNavigate {
+        if let viewControllerType = context.viewControllerType,
+           let canNavigate = viewController.topMost?.navigatable?.viewControllerCanNavigate?(with: context.params, viewControllerType: viewControllerType),
+           !canNavigate {
             delegate?.presentAction(self, context: context, failPresent: .rejectNavigate)
             return
         }

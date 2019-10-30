@@ -161,10 +161,12 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "${BUILT_PRODUCTS_DIR}/Protocol/Protocol.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StormUtil/StormUtil.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/URLRouter/URLRouter.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "${BUILT_PRODUCTS_DIR}/Protocol/Protocol.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/StormUtil/StormUtil.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/URLRouter/URLRouter.framework"
 fi

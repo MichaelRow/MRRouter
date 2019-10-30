@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Protocol
 
 public extension UIViewController {
     
@@ -15,5 +16,9 @@ public extension UIViewController {
     
     var routable: RoutableViewController? {
         return self as? RoutableViewController
+    }
+    
+    var navigatable: RoutableViewControllerNavigation? {
+        return self as? RoutableViewControllerNavigation
     }
 }

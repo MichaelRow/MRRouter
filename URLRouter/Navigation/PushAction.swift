@@ -24,7 +24,9 @@ class PushAction {
             return
         }
         
-        if let canNavigate = navigator.topMost?.routable?.viewControllerCanNavigate(with: context), !canNavigate {
+        if let viewControllerType = context.viewControllerType,
+           let canNavigate = navigator.topMost?.navigatable?.viewControllerCanNavigate?(with: context.params, viewControllerType: viewControllerType),
+           !canNavigate {
             delegate?.pushAction(self, context: context, failPresent: .rejectNavigate)
             return
         }
@@ -80,9 +82,9 @@ class PushAction {
     
     @discardableResult private func handleRefreshParameter(_ context: RoutingContext, navigationController: UINavigationController) -> RouterError? {
         guard let targetVC = navigationController.topViewController else { return .getTopMostVCFailed }
-        targetVC.routable?.viewControllerWillUpdateParameters(with: context)
+        targetVC.navigatable?.viewControllerWillUpdate?(parameter: context.params)
         targetVC.routable?.parameters = context.params
-        targetVC.routable?.viewControllerDidUpdateParameters(with: context)
+        targetVC.navigatable?.viewControllerDidUpdate?(parameter: context.params)
         return nil
     }
     
@@ -122,9 +124,9 @@ class PushAction {
         guard let index = index else { return .noStackPopDestinationIndex }
         let stackVCs = navigationController.viewControllers[0...index]
         guard let lastVC = stackVCs.last else { return .noVCInStack }
-        lastVC.routable?.viewControllerWillUpdateParameters(with: context)
+        lastVC.navigatable?.viewControllerWillUpdate?(parameter: context.params)
         lastVC.routable?.parameters = context.params
-        lastVC.routable?.viewControllerDidUpdateParameters(with: context)
+        lastVC.navigatable?.viewControllerDidUpdate?(parameter: context.params)
         navigationController.setViewControllers(Array(stackVCs), animated: context.option.contains(.popReplaceAnimation))
         return nil
     }

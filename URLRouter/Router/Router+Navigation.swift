@@ -18,7 +18,13 @@ public enum TabBarOpenType {
 
 public extension Router {
     
-    func register(pattern: URLConvertible, viewControllerType: UIViewController.Type, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
+    /// 注册路由
+    /// - Parameter pattern: URL地址
+    /// - Parameter viewControllerType: 符合RoutableViewController的VC
+    /// - Parameter routing: URL参数解析与重定向路径
+    /// - Parameter tabBarIndex: 需要打开的tabBar位置
+    /// - Parameter override: 是否覆盖
+    func register(pattern: URLConvertible, viewControllerType: (UIViewController & RoutableViewController).Type, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
         var usedRouting = routing ?? wildcardRouting
         if usedRouting.nestRouter !== self {
             usedRouting.nestRouter = self

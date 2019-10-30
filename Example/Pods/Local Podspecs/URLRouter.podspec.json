@@ -23,6 +23,9 @@
   "dependencies": {
     "StormUtil": [
 
+    ],
+    "Protocol": [
+
     ]
   },
   "swift_version": "5.0"

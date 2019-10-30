@@ -70,11 +70,6 @@ open class GeneralNaigator: Navigator {
     }
     
     private func push(in tabBarController: UITabBarController, context: RoutingContext) {
-        if let canNavigate = tabBarController.topMost?.routable?.viewControllerCanNavigate(with: context), !canNavigate {
-            context.completion?(.rejectNavigate)
-            return
-        }
-        
         guard let tabViewControllers = tabBarController.viewControllers else {
             context.completion?(.tabBarControllerError)
             return
@@ -97,7 +92,8 @@ open class GeneralNaigator: Navigator {
     }
     
     private func instantiateViewController(_ context: RoutingContext) -> UIViewController? {
-        guard let viewController = context.instantiateViewController() else { return nil }
+        guard let viewController = context.viewControllerType?.init() else { return nil }
+        viewController.routable?.parameters = context.params
         if context.option.contains(.wrapInNavigation), !context.option.contains(.push) {
             let navi = wrapperType.init(rootViewController: viewController)
             navi.navigationBar.isTranslucent = false

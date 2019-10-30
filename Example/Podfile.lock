@@ -1,6 +1,8 @@
 PODS:
+  - Protocol (0.1.0)
   - StormUtil (0.1.0)
   - URLRouter (0.1.0):
+    - Protocol
     - StormUtil
 
 DEPENDENCIES:
@@ -8,6 +10,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   "git@code.aliyun.com:szfy_ios/SZFYSpecs.git":
+    - Protocol
     - StormUtil
 
 EXTERNAL SOURCES:
@@ -15,9 +18,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
+  Protocol: c506ce84f0b05bb780ac16c10591d91f7933872f
   StormUtil: 1b472c07eb17c3ca404da38f1eca90a84e2f26f6
-  URLRouter: 9189c93fd10625ced5b71b538f239d35ee0c2107
+  URLRouter: 2e5ae45e4a06d240392634834652563c01162e36
 
 PODFILE CHECKSUM: cf8139ef948f7a50dd08950de5165323ab4d7b2c
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.8.4

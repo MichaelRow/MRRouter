@@ -43,14 +43,6 @@ public typealias RouterCompletion = (RouterError?) -> Void
         
         super.init()
     }
-    
-    public func instantiateViewController() -> UIViewController? {
-        if let viewController = viewControllerType?.routable?.init(params) as? UIViewController {
-            return viewController
-        } else {
-            return viewControllerType?.init()
-        }
-    }
 }
 
 public extension RoutingContext {
