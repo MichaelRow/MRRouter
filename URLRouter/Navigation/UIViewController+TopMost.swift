@@ -7,6 +7,13 @@
 
 import UIKit
 
+public extension UIView {
+    
+    var topMost: UIViewController? {
+        return  window?.rootViewController?.topMost
+    }
+}
+
 public extension UIViewController {
     
     var topMost: UIViewController? {

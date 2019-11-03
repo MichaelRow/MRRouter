@@ -32,6 +32,10 @@ open class Router {
         self.wildcardRouting = wildcardRouting
         self.wildcardRouting.nestRouter = self
     }
+    
+    public var topMost: UIViewController? {
+        return self.nestWindow?.rootViewController?.topMost
+    }
 }
 
 public extension Router {

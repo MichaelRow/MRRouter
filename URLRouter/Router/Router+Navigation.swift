@@ -42,6 +42,8 @@ public extension Router {
         }
     }
     
+    /// 注销注册表中的URL
+    /// - Parameter removeGrandchild: 是否移除该节点之后的所有子节点
     func unregister(pattern: URLConvertible, removeGrandchild: Bool = false) {
         guard let matchedResult = matcher.match(pattern: pattern, with: rootNode) else { return }
         matchedResult.matchedNode.parentNode?.remove(child: matchedResult.matchedNode.nodePattern, removeGrandchild: removeGrandchild)
@@ -55,6 +57,18 @@ public extension Router {
     /// 获得注册在Router中的VC类型
     func registeredViewController(for url: URLConvertible) -> UIViewController.Type? {
         return matcher.match(pattern: url, with: rootNode)?.matchedNode.viewControllerType
+    }
+    
+    /// 根据指定的URL初始化在注册表中的VC
+    /// - Parameter url: URL
+    /// - Parameter params: 初始化参数
+    func instantiatedViewController(for url: URLConvertible, params: [String : Any]? = nil) -> UIViewController? {
+        guard let type = matcher.match(pattern: url, with: rootNode)?.matchedNode.viewControllerType else { return nil }
+        let viewController = type.init()
+        if let params = params {
+            viewController.routable?.parameters = params
+        }
+        return viewController
     }
     
     func back(_ useTopMost: Bool, animated: Bool) {
