@@ -18,9 +18,7 @@ open class GeneralNaigator: Navigator {
     private var pushAction: PushAction
     
     private var presentAction: PresentAction
-    
-    private var window: UIWindow? { nestWindow ?? UIApplication.shared.keyWindow }
-    
+        
     public init(_ nestWindow: UIWindow? = nil, wrapperType: UINavigationController.Type = UINavigationController.self) {
         self.nestWindow = nestWindow
         self.wrapperType = wrapperType

@@ -16,8 +16,26 @@ public extension UIView {
 
 public extension UIViewController {
     
+    var navigation: UINavigationController? {
+        guard let topMostVC = topMost else { return nil }
+        var currentVC: UIViewController? = topMostVC
+        var navi: UINavigationController? = nil
+        repeat {
+            if let currentNaviController = currentVC as? UINavigationController {
+                navi = currentNaviController
+            } else if let naviController = currentVC?.navigationController {
+                navi = naviController
+            }
+            
+            currentVC = currentVC?.presentedViewController
+            
+        } while currentVC != nil
+        
+        return navi
+    }
+    
     var topMost: UIViewController? {
-        return self.topMost(of: self)
+        return topMost(of: self)
     }
     
     var topMostNavigation: UINavigationController? {

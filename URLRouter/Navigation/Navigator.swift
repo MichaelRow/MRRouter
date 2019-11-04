@@ -25,3 +25,9 @@ public protocol Navigator: class {
     
     func push(context: RoutingContext)
 }
+
+public extension Navigator {
+    var window: UIWindow? {
+        nestWindow ?? UIApplication.shared.keyWindow
+    }
+}
