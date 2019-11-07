@@ -75,6 +75,10 @@ public extension Router {
         navigator.back(useTopMost, animated: animated)
     }
     
+    func dismiss(animated: Bool, completion:(() -> Void)? = nil) {
+        navigator.dismiss(animated: animated, completion: completion)
+    }
+    
     func push(url: URLConvertible, parameters: [String : Any]? = nil, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
         let opt = option.union(.push).subtracting(.present)
         open(url: url, parameters: parameters, option: opt, tabBarOpenType: tabBarOpenType, completion: completion)

@@ -19,6 +19,8 @@ public protocol Navigator: class {
     
     func back(_ useTopMost: Bool, animated: Bool)
     
+    func dismiss(animated: Bool, completion:(() -> Void)?)
+    
     func open(context: RoutingContext)
     
     func present(context: RoutingContext)

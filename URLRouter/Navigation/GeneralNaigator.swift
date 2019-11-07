@@ -34,6 +34,11 @@ open class GeneralNaigator: Navigator {
         BackAction.back(on: window?.rootViewController, useTopMost: useTopMost, animated: animated)
     }
     
+    public func dismiss(animated: Bool, completion:(() -> Void)? = nil) {
+        guard let vc = window?.rootViewController else { completion?(); return }
+        ModalAction.dismissModal(for: vc, animated: animated, completion: completion)
+    }
+    
     public func open(context: RoutingContext) {
         guard context.viewControllerType != nil else {
             context.completion?(.essitialCheckFail)
