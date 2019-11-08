@@ -71,11 +71,15 @@ public extension Router {
         return viewController
     }
     
-    func back(_ useTopMost: Bool, animated: Bool) {
+    func back(_ useTopMost: Bool = true, animated: Bool = true) {
         navigator.back(useTopMost, animated: animated)
     }
     
-    func dismiss(animated: Bool, completion:(() -> Void)? = nil) {
+    func dismiss(animated: Bool = true, completion: RouterCompletion? = nil) {
+        navigator.dismiss(animated: animated, completion: completion)
+    }
+    
+    func dismissLast(animated: Bool = true, completion: RouterCompletion? = nil) {
         navigator.dismiss(animated: animated, completion: completion)
     }
     

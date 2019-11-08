@@ -30,13 +30,30 @@ open class GeneralNaigator: Navigator {
         presentAction.delegate = self
     }
     
-    public func back(_ useTopMost: Bool, animated: Bool) {
+    public func back(_ useTopMost: Bool = true, animated: Bool = true) {
         BackAction.back(on: window?.rootViewController, useTopMost: useTopMost, animated: animated)
     }
     
-    public func dismiss(animated: Bool, completion:(() -> Void)? = nil) {
-        guard let vc = window?.rootViewController else { completion?(); return }
-        ModalAction.dismissModal(for: vc, animated: animated, completion: completion)
+    public func dismiss(animated: Bool = true, completion: RouterCompletion? = nil) {
+        guard let rootVC = window?.rootViewController else {
+            completion?(.getTopMostVCFailed)
+            return
+        }
+        ModalAction.dismissModal(for: rootVC, animated: animated) {
+            completion?(nil)
+        }
+    }
+    
+    public func dismissLast(animated: Bool = true, completion: RouterCompletion? = nil) {
+        guard let topMost = window?.rootViewController?.topMost else {
+            completion?(.getTopMostVCFailed)
+            return
+        }
+        if let presented = topMost.presentedViewController {
+            presented.dismiss(animated: animated) {
+                completion?(nil)
+            }
+        }
     }
     
     public func open(context: RoutingContext) {
