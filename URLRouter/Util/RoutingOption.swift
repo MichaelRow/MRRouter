@@ -23,6 +23,8 @@ public struct RoutingOption: OptionSet {
     public static let ignoreLevel = RoutingOption(rawValue: 1 << 5)
     /// 页面出栈和替换有动画
     public static let popReplaceAnimation = RoutingOption(rawValue: 1 << 6)
+    /// 全屏模态
+    public static let fullScreenModal = RoutingOption(rawValue: 1 << 7)
     
     /// 压栈跳转，与present互斥
     public static let push = RoutingOption(rawValue: 1 << 10)

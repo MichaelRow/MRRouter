@@ -41,6 +41,9 @@ class PresentAction {
             return
         }
         
+        if context.option.contains(.fullScreenModal) {
+            newVC.modalPresentationStyle = .fullScreen
+        }
         viewController.topMost?.present(newVC, animated: !context.option.contains(.withoutAnimation)) {
             context.completion?(nil)
             self.delegate?.presentAction(self, didPresent: context)
