@@ -40,7 +40,7 @@ open class URLMapNode {
         self.tabBarIndex = tabBarIndex
     }
     
-    public func add(child pattern: URLPathElement, viewControllerType: (UIViewController & RoutableViewController).Type? = nil, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
+    public func add(child pattern: URLPathElement, viewControllerType: (UIViewController).Type? = nil, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
         if let node = self[pattern] {
             guard override else { return }
             node.viewControllerType = viewControllerType

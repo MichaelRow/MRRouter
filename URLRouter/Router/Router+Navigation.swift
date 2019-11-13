@@ -24,7 +24,10 @@ public extension Router {
     /// - Parameter routing: URL参数解析与重定向路径
     /// - Parameter tabBarIndex: 需要打开的tabBar位置
     /// - Parameter override: 是否覆盖
-    func register(pattern: URLConvertible, viewControllerType: (UIViewController & RoutableViewController).Type, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
+    // TODO: - 暂时去掉限制, 因为旧工程OC存在问题 (todo xiaofengmin)
+
+//    func register(pattern: URLConvertible, viewControllerType: (UIViewController & RoutableViewController).Type, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
+    func register(pattern: URLConvertible, viewControllerType: UIViewController.Type, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
         var usedRouting = routing ?? wildcardRouting
         if usedRouting.nestRouter !== self {
             usedRouting.nestRouter = self
