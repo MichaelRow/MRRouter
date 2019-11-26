@@ -36,5 +36,4 @@ Carthage/Build
 #
 # Pods/
 
-Example/Pods/StormUtil
-Example/Pods/Target Support Files/StormUtil
+Example/Pods
