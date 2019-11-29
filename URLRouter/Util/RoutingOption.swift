@@ -11,8 +11,8 @@ public struct RoutingOption: OptionSet {
     
     /// 无跳转动画
     public static let withoutAnimation = RoutingOption(rawValue: 1 << 0)
-    /// 使用就近导航栏控制器
-    public static let useTopMostNavigation = RoutingOption(rawValue: 1 << 1)
+    /// 使用最底层的导航控制器
+    public static let useStackNavigation = RoutingOption(rawValue: 1 << 1)
     /// 包装在导航控制器中
     public static let wrapInNavigation = RoutingOption(rawValue: 1 << 2)
     /// 关闭所有模态页面

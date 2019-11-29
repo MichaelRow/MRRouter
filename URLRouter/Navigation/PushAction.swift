@@ -33,7 +33,7 @@ class PushAction {
         
         ModalAction.dismissModalIfNeeded(for: navigator, context: context) {
             // 先找到合适的导航栏控制器
-            guard let navigationController = context.option.contains(.useTopMostNavigation) ? navigator.topMostNavigation : navigator
+            guard let navigationController = context.option.contains(.useStackNavigation) ? navigator : navigator.topMostNavigation
             else {
                 self.delegate?.pushAction(self, context: context, failPresent: .noNavigationController)
                 return

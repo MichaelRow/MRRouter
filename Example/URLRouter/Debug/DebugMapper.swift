@@ -27,7 +27,7 @@ class DebugMapper {
         var actions = [NavigateActionModel]()
         
         actions.append(NavigateActionModel(name: "withoutAnimation", option: [.withoutAnimation]))
-        actions.append(NavigateActionModel(name: "useTopMostNavigation", option: [.useTopMostNavigation]))
+        actions.append(NavigateActionModel(name: "useStackNavigation", option: []))
         actions.append(NavigateActionModel(name: "wrapInNavigation", option: [.wrapInNavigation]))
         actions.append(NavigateActionModel(name: "dismissModal", option: [.dismissModal]))
         actions.append(NavigateActionModel(name: "withoutDismissalAnimation", option: [.withoutDismissalAnimation]))

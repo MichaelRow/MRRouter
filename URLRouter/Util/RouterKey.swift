@@ -17,7 +17,7 @@ public extension Router {
     
     enum Option: String, CaseIterable {
         case withoutAnimation
-        case useTopMostNavigation
+        case useStackNavigation
         case wrapInNavigation
         case dismissModal
         case withoutDismissalAnimation
@@ -30,8 +30,8 @@ public extension Router {
             switch self {
             case .withoutAnimation:
                 return .withoutAnimation
-            case .useTopMostNavigation:
-                return .useTopMostNavigation
+            case .useStackNavigation:
+                return .useStackNavigation
             case .wrapInNavigation:
                 return .wrapInNavigation
             case .dismissModal:
