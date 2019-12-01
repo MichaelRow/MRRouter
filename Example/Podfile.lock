@@ -1,7 +1,7 @@
 PODS:
   - Protocol (0.1.0)
   - StormUtil (0.1.0)
-  - URLRouter (0.1.0):
+  - URLRouter (0.1.1):
     - Protocol
     - StormUtil
 
@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Protocol: 948ae4bc66a6822c0ab47d94b801ad09c87a3243
   StormUtil: 3cf185936defef673ba3f42e2c15c2aa214a2dfa
-  URLRouter: 4096295a2919e564a99fc1319261ecb5ac5e86b0
+  URLRouter: eec5b2a694a15c8cb1c548dd7759bf6a179221a7
 
 PODFILE CHECKSUM: cf8139ef948f7a50dd08950de5165323ab4d7b2c
 

@@ -115,14 +115,14 @@ class DebugConsoleView: UIView {
         guard let url = textField.text else { return }
         let tabIndex = Int(tabTextField.text ?? "")
         let openType: TabBarOpenType = tabIndex == nil ? .current : .custom(tabIndex!)
-        Router.shared.push(url: url, parameters: [:], option: optionInTableView(), tabBarOpenType: openType, completion: nil)
+        Router.shared.push(pattern: .init(url: url), parameters: [:], option: optionInTableView(), tabBarOpenType: openType, completion: nil)
     }
     
     @objc func presentAction(_ sender: UIButton) {
         guard let url = textField.text else { return }
         let tabIndex = Int(tabTextField.text ?? "")
         let openType: TabBarOpenType = tabIndex == nil ? .current : .custom(tabIndex!)
-        Router.shared.present(url: url, parameters: [:], option: optionInTableView(), tabBarOpenType: openType, completion: nil)
+        Router.shared.present(pattern: .init(url: url), parameters: [:], option: optionInTableView(), tabBarOpenType: openType, completion: nil)
     }
     
     @objc func switchAction(_ sender: UIButton) {

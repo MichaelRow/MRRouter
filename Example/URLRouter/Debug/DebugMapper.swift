@@ -14,13 +14,12 @@ class DebugMapper {
     static let shared = DebugMapper()
     
     func registerURLs() {
-        Router.shared.register(pattern: "routerA://title", viewControllerType: TitleViewController.self)
-        Router.shared.register(pattern: "routerA://general/setting", viewControllerType: SettingVC.self)
-        Router.shared.register(pattern: "routerA://general/zone", viewControllerType: ZoneVC.self)
-        Router.shared.register(pattern: "routerA://general/<AnyParams>", viewControllerType: AnyParamsVC.self)
-        Router.shared.register(pattern: "routerB://title", viewControllerType: TitleViewController.self)
-        Router.shared.register(pattern: "routerC://news", viewControllerType: NewsVC.self)
-        Router.shared.register(pattern: "routerC://kline", viewControllerType: KLineVC.self)
+        Router.shared.register(pattern: .title, viewControllerType: TitleViewController.self)
+        Router.shared.register(pattern: .setting, viewControllerType: SettingVC.self)
+        Router.shared.register(pattern: .zone, viewControllerType: ZoneVC.self)
+        Router.shared.register(pattern: .any, viewControllerType: AnyParamsVC.self)
+        Router.shared.register(pattern: .news, viewControllerType: NewsVC.self)
+        Router.shared.register(pattern: .kline, viewControllerType: KLineVC.self)
     }
     
     var navigateActions: [NavigateActionModel] = {
@@ -36,4 +35,13 @@ class DebugMapper {
         
         return actions
     }()
+}
+
+extension Router.Name {
+    static let title = Self(url: "routerA://title")
+    static let setting = Self(url: "routerA://general/setting")
+    static let zone = Self(url: "routerA://general/zone")
+    static let any = Self(url: "routerA://general/<AnyParams>")
+    static let news = Self(url: "routerA://news")
+    static let kline = Self(url: "routerA://kline")
 }
