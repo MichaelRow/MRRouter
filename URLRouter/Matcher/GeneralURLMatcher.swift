@@ -5,7 +5,7 @@
 //  Created by Michael on 2019/9/12.
 //
 
-public typealias URLMatchResult = (matchedNode: URLMapNode, placeholders: [String:String])
+public typealias URLMatchResult = (matchedNode: URLMapNode, placeholders: [String : String])
 
 public protocol URLMatcher {
     

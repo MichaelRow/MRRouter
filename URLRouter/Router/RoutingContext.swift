@@ -20,7 +20,7 @@ public typealias RouterCompletion = (RouterError?) -> Void
     public var params: [String : Any]
     
     public var viewControllerType: UIViewController.Type?
-    
+        
     public var completion: RouterCompletion?
     
     public lazy var option: RoutingOption = []
@@ -37,20 +37,15 @@ public typealias RouterCompletion = (RouterError?) -> Void
         self.params = self.placeholders
         self.params.merge(originalURL.queryParameters, uniquingKeysWith: { (_, new) in new })
         self.params.merge(self.originalParams, uniquingKeysWith: { (_, new) in new })
-        self.params[.original] = self.originalParams
-        self.params[.placeHolders] = self.placeholders
-        self.params[.query] = originalURL.queryParameters
+        self.params["original"] = self.originalParams
+        self.params["placeHolders"] = self.placeholders
+        self.params["query"] = originalURL.queryParameters
         
         super.init()
     }
 }
 
 public extension RoutingContext {
-    subscript(key: Router.Params) -> [String : Any]? {
-        get { return params[key] }
-        set { params[key] = newValue }
-    }
-    
     subscript(key: Router.Option) -> Bool? {
         get { return params[key] }
         set { params[key] = newValue }

@@ -9,12 +9,6 @@ import Foundation
 
 public extension Router {
     
-    enum Params: String {
-        case original
-        case placeHolders
-        case query
-    }
-    
     enum Option: String, CaseIterable {
         case withoutAnimation
         case useStackNavigation
@@ -53,17 +47,6 @@ public extension Router {
 }
 
 public extension Dictionary where Key: ExpressibleByStringLiteral {
-    
-    subscript(key: Router.Params) -> [String : Any]? {
-        get {
-            guard let strKey = key.rawValue as? Key else { return nil }
-            return self[strKey] as? [String : Any]
-        }
-        set {
-            guard let strKey = key.rawValue as? Key else { return }
-            self[strKey] = newValue as? Value
-        }
-    }
     
     subscript(key: Router.Option) -> Bool? {
         get {
