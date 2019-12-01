@@ -44,7 +44,7 @@ public extension Router {
     /// - Parameter override: 是否覆盖
     // TODO: - 暂时去掉限制, 因为旧工程OC存在问题 (todo xiaofengmin)
 
-//    func register(pattern: URLConvertible, viewControllerType: (UIViewController & RoutableViewController).Type, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
+//    func register(pattern: Name, viewControllerType: (UIViewController & RoutableViewController).Type, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
     func register(pattern: Name, viewControllerType: UIViewController.Type, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
         var usedRouting = routing ?? wildcardRouting
         if usedRouting.nestRouter !== self {

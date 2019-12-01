@@ -16,6 +16,7 @@ class DebugMapper {
     func registerURLs() {
         Router.shared.register(pattern: .title, viewControllerType: TitleViewController.self)
         Router.shared.register(pattern: .setting, viewControllerType: SettingVC.self)
+        Router.shared.register(pattern: .general, viewControllerType: GeneralVC.self, override: false)
         Router.shared.register(pattern: .zone, viewControllerType: ZoneVC.self)
         Router.shared.register(pattern: .any, viewControllerType: AnyParamsVC.self)
         Router.shared.register(pattern: .news, viewControllerType: NewsVC.self)
@@ -40,6 +41,7 @@ class DebugMapper {
 extension Router.Name {
     static let title = Self(url: "routerA://title")
     static let setting = Self(url: "routerA://general/setting")
+    static let general = Self(url: "routerA://general")
     static let zone = Self(url: "routerA://general/zone")
     static let any = Self(url: "routerA://general/<AnyParams>")
     static let news = Self(url: "routerA://news")

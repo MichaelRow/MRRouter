@@ -36,3 +36,7 @@ class AnyParamsVC: TitleViewController {
 class ZoneVC: TitleViewController {
     override class var stackLevel: StackLevel { return .lowest }
 }
+
+class GeneralVC: TitleViewController {
+    override class var stackLevel: StackLevel { return .high }
+}
