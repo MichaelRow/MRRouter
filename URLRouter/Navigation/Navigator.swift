@@ -28,6 +28,10 @@ public protocol Navigator: class {
     func present(context: RoutingContext)
     
     func push(context: RoutingContext)
+        
+    func push(_ viewController: UIViewController, option: RoutingOption, toTabBarIndex: Int?, completion: RouterCompletion?)
+    
+    func present(_ viewController: UIViewController, option: RoutingOption, completion: RouterCompletion?)
 }
 
 public extension Navigator {

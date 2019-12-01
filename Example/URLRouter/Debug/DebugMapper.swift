@@ -14,20 +14,20 @@ class DebugMapper {
     static let shared = DebugMapper()
     
     func registerURLs() {
-        Router.shared.register(pattern: .title, storedVC: .type(TitleViewController.self))
-        Router.shared.register(pattern: .setting, storedVC: .type(SettingVC.self))
-        Router.shared.register(pattern: .general, storedVC: .type(GeneralVC.self), override: false)
-        Router.shared.register(pattern: .zone, storedVC: .type(ZoneVC.self))
-        Router.shared.register(pattern: .any, storedVC: .type(AnyParamsVC.self))
-        Router.shared.register(pattern: .news, storedVC: .type(NewsVC.self))
-        Router.shared.register(pattern: .kline, storedVC: .type(KLineVC.self))
+        Router.shared.register(.title, storedVC: .type(TitleViewController.self))
+        Router.shared.register(.setting, storedVC: .type(SettingVC.self))
+        Router.shared.register(.general, storedVC: .type(GeneralVC.self), override: false)
+        Router.shared.register(.zone, storedVC: .type(ZoneVC.self))
+        Router.shared.register(.any, storedVC: .type(AnyParamsVC.self))
+        Router.shared.register(.news, storedVC: .type(NewsVC.self))
+        Router.shared.register(.kline, storedVC: .type(KLineVC.self))
     }
     
     var navigateActions: [NavigateActionModel] = {
         var actions = [NavigateActionModel]()
         
         actions.append(NavigateActionModel(name: "withoutAnimation", option: [.withoutAnimation]))
-        actions.append(NavigateActionModel(name: "useStackNavigation", option: []))
+        actions.append(NavigateActionModel(name: "useStackNavigation", option: [.useStackNavigation]))
         actions.append(NavigateActionModel(name: "wrapInNavigation", option: [.wrapInNavigation]))
         actions.append(NavigateActionModel(name: "dismissModal", option: [.dismissModal]))
         actions.append(NavigateActionModel(name: "withoutDismissalAnimation", option: [.withoutDismissalAnimation]))

@@ -74,41 +74,72 @@ open class GeneralNaigator: Navigator {
         presentAction.present(on: window?.rootViewController, context: context)
     }
     
+    public func present(_ viewController: UIViewController, option: RoutingOption, completion: RouterCompletion?) {
+        presentAction.present(viewController: viewController, on: window?.rootViewController, option: option, completion: completion)
+    }
+    
+    //MARK: - Push
+    
     public func push(context: RoutingContext) {
+        navigationControllerForPush(toTabBarIndex: context.toTabBarIndex, option: context.option) { result in
+            switch result {
+            case .success(let navi):
+                self.pushAction.push(on: navi, context: context)
+            case .failure(let error):
+                self.navigatorDelegate?.navigator(self, failedPush: context, error: error)
+                context.completion?(error)
+            }
+        }
+    }
+    
+    public func push(_ viewController: UIViewController, option: RoutingOption, toTabBarIndex: Int?, completion: RouterCompletion?) {
+        navigationControllerForPush(toTabBarIndex: toTabBarIndex, option: option) { result in
+            switch result {
+            case .success(let navi):
+                self.pushAction.push(viewController, on: navi, option: option, completion: completion)
+            case .failure(let error):
+                self.navigatorDelegate?.navigator(self, failedPush: nil, error: error)
+                completion?(error)
+            }
+        }
+    }
+    
+    private func navigationControllerForPush(toTabBarIndex: Int?, option: RoutingOption, completion: @escaping (Result<UINavigationController, RouterError>) -> Void) {
         guard let rootVC = window?.rootViewController else {
-            context.completion?(.getTopMostVCFailed)
+            completion(.failure(.getTopMostVCFailed))
             return
         }
         
         if let navi = rootVC as? UINavigationController {
-            pushAction.push(on: navi, context: context)
+            completion(.success(navi))
+            
         } else if let tabBar = rootVC as? UITabBarController {
-            push(in: tabBar, context: context)
+            
+            guard let tabViewControllers = tabBar.viewControllers else {
+                completion(.failure(.tabBarControllerError))
+                return
+            }
+                    
+            let toIndex = toTabBarIndex ?? tabBar.selectedIndex
+            guard toIndex < 5,
+                  toIndex < tabViewControllers.count,
+                  let navigationController = tabViewControllers[toIndex] as? UINavigationController
+            else {
+                completion(.failure(.tabBarControllerError))
+                return
+            }
+            
+            if toIndex != tabBar.selectedIndex {
+                ModalAction.dismissModalIfNeeded(for: tabBar, option: option) {
+                    tabBar.selectedIndex = toIndex
+                    completion(.success(navigationController))
+                }
+            } else {
+                completion(.success(navigationController))
+            }
         } else {
-            context.completion?(.getTopMostVCFailed)
+            completion(.failure(.getTopMostVCFailed))
         }
-    }
-    
-    private func push(in tabBarController: UITabBarController, context: RoutingContext) {
-        guard let tabViewControllers = tabBarController.viewControllers else {
-            context.completion?(.tabBarControllerError)
-            return
-        }
-                
-        let toIndex = context.toTabBarIndex == nil ? tabBarController.selectedIndex : context.toTabBarIndex!
-        guard toIndex < 5,
-              toIndex < tabViewControllers.count,
-              let navigationController = tabViewControllers[toIndex] as? UINavigationController
-        else {
-            context.completion?(.tabBarControllerError)
-            return
-        }
-        
-        if toIndex != tabBarController.selectedIndex {
-            ModalAction.dismissModal(for: navigationController, context: context)
-            tabBarController.selectedIndex = toIndex
-        }
-        pushAction.push(on: navigationController, context: context)
     }
 }
 
@@ -118,17 +149,23 @@ extension GeneralNaigator: PushActionDelegate {
         return instantiateViewController(context)
     }
     
-    func pushAction(_ action: PushAction, willPush context: RoutingContext, stackType: StackType) {
+    func pushAction(_ action: PushAction, willPush context: RoutingContext?, stackType: StackType) {
         navigatorDelegate?.navigator(self, willPush: context, stackType: stackType)
     }
     
-    func pushAction(_ action: PushAction, didPush context: RoutingContext, stackType: StackType) {
+    func pushAction(_ action: PushAction, didPush context: RoutingContext?, stackType: StackType) {
         navigatorDelegate?.navigator(self, didPush: context, stackType: stackType)
+        
+        // 非注册VC跳转return
+        guard let context = context else { return }
         context.completion?(nil)
     }
     
-    func pushAction(_ action: PushAction, context: RoutingContext, failPresent error: RouterError) {
+    func pushAction(_ action: PushAction, context: RoutingContext?, failPresent error: RouterError) {
         navigatorDelegate?.navigator(self, failedPush: context, error: error)
+        
+        // 非注册VC跳转return
+        guard let context = context else { return }
         context.completion?(error)
     }
 }
@@ -139,17 +176,23 @@ extension GeneralNaigator: PresentActionDelegate {
         return instantiateViewController(context)
     }
     
-    func presentAction(_ action: PresentAction, willPresent context: RoutingContext) {
+    func presentAction(_ action: PresentAction, willPresent context: RoutingContext?) {
         navigatorDelegate?.navigator(self, willPresent: context)
     }
     
-    func presentAction(_ action: PresentAction, didPresent context: RoutingContext) {
+    func presentAction(_ action: PresentAction, didPresent context: RoutingContext?) {
         navigatorDelegate?.navigator(self, didPresent: context)
+        
+        // 非注册VC跳转return
+        guard let context = context else { return }
         context.completion?(nil)
     }
     
-    func presentAction(_ action: PresentAction, context: RoutingContext, failPresent error: RouterError) {
+    func presentAction(_ action: PresentAction, context: RoutingContext?, failPresent error: RouterError) {
         navigatorDelegate?.navigator(self, failedPresent: context, error: error)
+        
+        // 非注册VC跳转return
+        guard let context = context else { return }
         context.completion?(error)
     }
 }

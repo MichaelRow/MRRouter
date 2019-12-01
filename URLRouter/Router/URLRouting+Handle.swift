@@ -67,7 +67,7 @@ public extension URLRouting {
     private func handleRedirectors(_ context: RoutingContext) -> Bool {
         for redirector in redirectors {
             if redirector.canHandle, let url = redirector.handle(context) {
-                nestRouter?.open(pattern: Router.Name(url: url), parameters: context.params, completion: context.completion)
+                nestRouter?.open(Router.Name(url: url), parameters: context.params, completion: context.completion)
                 return true
             }
         }

@@ -41,7 +41,7 @@ public extension Router {
     /// - Parameter routing: URL参数解析与重定向路径
     /// - Parameter tabBarIndex: 需要打开的tabBar位置
     /// - Parameter override: 是否覆盖
-    func register(pattern: Name, storedVC: StoredVC, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
+    func register(_ pattern: Name, storedVC: StoredVC, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
         var usedRouting = routing ?? wildcardRouting
         if usedRouting.nestRouter !== self {
             usedRouting.nestRouter = self
@@ -61,7 +61,7 @@ public extension Router {
     
     /// 注销注册表中的URL
     /// - Parameter removeGrandchild: 是否移除该节点之后的所有子节点
-    func unregister(pattern: Name, removeGrandchild: Bool = false) {
+    func unregister(_ pattern: Name, removeGrandchild: Bool = false) {
         guard let matchedResult = matcher.match(pattern: pattern.rawValue, with: rootNode) else { return }
         matchedResult.matchedNode.parentNode?.remove(child: matchedResult.matchedNode.nodePattern, removeGrandchild: removeGrandchild)
     }
@@ -72,7 +72,7 @@ public extension Router {
     }
     
     /// 是否有注册当前URL
-    func canOpen(pattern: Name) -> Bool {
+    func canOpen(_ pattern: Name) -> Bool {
         return canOpen(url: pattern.rawValue)
     }
     
@@ -106,17 +106,19 @@ public extension Router {
         navigator.dismiss(animated: animated, completion: completion)
     }
     
-    func push(pattern: Name, parameters: [String : Any]? = nil, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
+    //MARK: - 注册VC
+    
+    func push(_ pattern: Name, parameters: [String : Any]? = nil, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
         let opt = option.union(.push).subtracting(.present)
-        open(pattern: pattern, parameters: parameters, option: opt, tabBarOpenType: tabBarOpenType, completion: completion)
+        open(pattern, parameters: parameters, option: opt, tabBarOpenType: tabBarOpenType, completion: completion)
     }
     
-    func present(pattern: Name, parameters: [String : Any]? = nil, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
+    func present(_ pattern: Name, parameters: [String : Any]? = nil, option: RoutingOption = [], completion: RouterCompletion? = nil) {
         let opt = option.union(.present).subtracting(.push)
-        open(pattern: pattern, parameters: parameters, option: opt, tabBarOpenType: tabBarOpenType, completion: completion)
+        open(pattern, parameters: parameters, option: opt, tabBarOpenType: .preset, completion: completion)
     }
     
-    func open(pattern: Name, parameters: [String : Any]? = nil, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
+    func open(_ pattern: Name, parameters: [String : Any]? = nil, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
         let result = matcher.match(pattern: pattern.rawValue, with: rootNode)
         
         let context = RoutingContext(originalURL: pattern.rawValue, params: parameters, placeholders: result?.placeholders, storedVC: result?.matchedNode.storedVC, completion: completion)
@@ -142,5 +144,24 @@ public extension Router {
         } else {
             completion?(.noRouting)
         }
+    }
+    
+    //MARK: - 未注册VC
+    
+    func push(_ viewController: UIViewController, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
+        let opt = option.union(.push).subtracting(.present)
+        let toIndex: Int?
+        switch tabBarOpenType {
+        case .current, .preset:
+            toIndex = nil
+        case .custom(let index):
+            toIndex = index
+        }
+        navigator.push(viewController, option: opt, toTabBarIndex: toIndex, completion: completion)
+    }
+    
+    func present(_ viewController: UIViewController, option: RoutingOption = [], completion: RouterCompletion? = nil) {
+        let opt = option.union(.present).subtracting(.push)
+        navigator.present(viewController, option: opt, completion: completion)
     }
 }
