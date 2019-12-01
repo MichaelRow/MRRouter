@@ -19,7 +19,7 @@ public typealias RouterCompletion = (RouterError?) -> Void
     
     public var params: [String : Any]
     
-    public var viewControllerType: UIViewController.Type?
+    public var storedVC: StoredVC?
         
     public var completion: RouterCompletion?
     
@@ -27,9 +27,9 @@ public typealias RouterCompletion = (RouterError?) -> Void
     
     public var toTabBarIndex: Int?
     
-    public init(originalURL: URLConvertible, params: [String : Any]? = nil, placeholders: [String : Any]? = nil, viewControllerType: UIViewController.Type?, completion: RouterCompletion?) {
+    public init(originalURL: URLConvertible, params: [String : Any]? = nil, placeholders: [String : Any]? = nil, storedVC: StoredVC? = nil, completion: RouterCompletion?) {
         self.originalURL = originalURL
-        self.viewControllerType = viewControllerType
+        self.storedVC = storedVC
         self.completion = completion
         
         self.originalParams = params ?? [:]

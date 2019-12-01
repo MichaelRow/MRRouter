@@ -11,7 +11,7 @@ open class URLMapNode {
     
     public var nodePattern: URLPathElement
     
-    public var viewControllerType: UIViewController.Type?
+    public var storedVC: StoredVC?
     
     public var routing: URLRouting?
     
@@ -33,24 +33,24 @@ open class URLMapNode {
         return allNode.reversed().reduce(""){ $0 + $1.nodePattern.rawValue + "/" }.normalizedURL
     }
     
-    public init(pattern: URLPathElement = .root, viewControllerType: UIViewController.Type? = nil, routing: URLRouting? = nil, tabBarIndex: Int? = nil) {
+    public init(pattern: URLPathElement = .root, storedVC: StoredVC? = nil, routing: URLRouting? = nil, tabBarIndex: Int? = nil) {
         self.nodePattern = pattern
-        self.viewControllerType = viewControllerType
+        self.storedVC = storedVC
         self.routing = routing
         self.tabBarIndex = tabBarIndex
     }
     
-    public func add(child pattern: URLPathElement, viewControllerType: (UIViewController).Type? = nil, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
+    public func add(child pattern: URLPathElement, storedVC: StoredVC? = nil, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
         if let node = self[pattern] {
-            let canOverride = override && viewControllerType != nil
-            let isFirstWrite = !override && node.viewControllerType == nil
+            let canOverride = override && storedVC != nil
+            let isFirstWrite = !override && node.storedVC == nil
             guard canOverride || isFirstWrite else { return }
             
-            node.viewControllerType = viewControllerType
+            node.storedVC = storedVC
             node.routing = routing
             node.tabBarIndex = tabBarIndex
         } else {
-            let node = URLMapNode(pattern: pattern, viewControllerType: viewControllerType, routing: routing, tabBarIndex: tabBarIndex)
+            let node = URLMapNode(pattern: pattern, storedVC: storedVC, routing: routing, tabBarIndex: tabBarIndex)
             node.parentNode = self
             childNodes[pattern] = node
         }
@@ -65,12 +65,12 @@ open class URLMapNode {
            child.childNodes.count > 0,
            !removeGrandchild
         {
-            child.viewControllerType = nil
+            child.storedVC = nil
             child.routing = nil
         } else {
             childNodes.removeValue(forKey: pattern)
             placeholderKeys.remove(pattern)
-            if childNodes.count == 0, viewControllerType == nil {
+            if childNodes.count == 0, storedVC == nil {
                 parentNode?.remove(child: nodePattern)
             }
         }

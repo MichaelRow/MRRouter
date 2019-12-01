@@ -57,7 +57,7 @@ open class GeneralNaigator: Navigator {
     }
     
     public func open(context: RoutingContext) {
-        guard context.viewControllerType != nil else {
+        guard context.storedVC != nil else {
             context.completion?(.essitialCheckFail)
             return
         }

@@ -24,8 +24,8 @@ class PresentAction {
             return
         }
         
-        if let viewControllerType = context.viewControllerType,
-           let canNavigate = viewController.topMost?.navigatable?.viewControllerCanNavigate?(with: context.params, viewControllerType: viewControllerType),
+        if let storedVC = context.storedVC,
+           let canNavigate = viewController.topMost?.navigatable?.viewControllerCanNavigate?(with: context.params, viewControllerType: storedVC.viewControllerType),
            !canNavigate {
             delegate?.presentAction(self, context: context, failPresent: .rejectNavigate)
             return

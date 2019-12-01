@@ -24,8 +24,7 @@ class PushAction {
             return
         }
         
-        if let viewControllerType = context.viewControllerType,
-           let canNavigate = navigator.topMost?.navigatable?.viewControllerCanNavigate?(with: context.params, viewControllerType: viewControllerType),
+        if let canNavigate = navigator.topMost?.navigatable?.viewControllerCanNavigate?(with: context.params, viewControllerType: context.storedVC?.viewControllerType),
            !canNavigate {
             delegate?.pushAction(self, context: context, failPresent: .rejectNavigate)
             return
@@ -143,7 +142,7 @@ class PushAction {
         
         let lastVCType = type(of: lastVC)
         // 无法比较栈等级的情况直接压栈
-        guard let newVCLevel = context.viewControllerType?.routable?.stackLevel,
+        guard let newVCLevel = context.storedVC?.viewControllerType.routable?.stackLevel,
               let lastVCLevel = lastVCType.routable?.stackLevel
         else {
             return (.push, nil)
@@ -156,7 +155,7 @@ class PushAction {
             stackType = .push
         } else if newVCLevel == lastVCLevel {
             //如果是同样的VC，只替换VC参数
-            if context.viewControllerType == lastVCType {
+            if context.storedVC?.viewControllerType == lastVCType {
                 stackType = .refreshParameters
             } else {
                 stackType = .replace
@@ -184,7 +183,7 @@ class PushAction {
                     break
                 } else if newVCLevel == currentLevel {
                     //如果是同样的VC，只替换VC参数
-                    if context.viewControllerType == currentVCType {
+                    if context.storedVC?.viewControllerType == currentVCType {
                         stackType = .popThenRefreshParameters
                     } else {
                         stackType = .popThenReplace

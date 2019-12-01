@@ -14,13 +14,13 @@ class DebugMapper {
     static let shared = DebugMapper()
     
     func registerURLs() {
-        Router.shared.register(pattern: .title, viewControllerType: TitleViewController.self)
-        Router.shared.register(pattern: .setting, viewControllerType: SettingVC.self)
-        Router.shared.register(pattern: .general, viewControllerType: GeneralVC.self, override: false)
-        Router.shared.register(pattern: .zone, viewControllerType: ZoneVC.self)
-        Router.shared.register(pattern: .any, viewControllerType: AnyParamsVC.self)
-        Router.shared.register(pattern: .news, viewControllerType: NewsVC.self)
-        Router.shared.register(pattern: .kline, viewControllerType: KLineVC.self)
+        Router.shared.register(pattern: .title, storedVC: .type(TitleViewController.self))
+        Router.shared.register(pattern: .setting, storedVC: .type(SettingVC.self))
+        Router.shared.register(pattern: .general, storedVC: .type(GeneralVC.self), override: false)
+        Router.shared.register(pattern: .zone, storedVC: .type(ZoneVC.self))
+        Router.shared.register(pattern: .any, storedVC: .type(AnyParamsVC.self))
+        Router.shared.register(pattern: .news, storedVC: .type(NewsVC.self))
+        Router.shared.register(pattern: .kline, storedVC: .type(KLineVC.self))
     }
     
     var navigateActions: [NavigateActionModel] = {

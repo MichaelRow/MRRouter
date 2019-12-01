@@ -11,8 +11,12 @@ import Foundation
 @objc public class OCRouter: NSObject {
     
     /// 使用符合RoutableViewController的VC注册路由
-    @objc func register(url: String, viewControllerType: (UIViewController & RoutableViewController).Type) {
-        Router.shared.register(pattern: Router.Name(url: url), viewControllerType: viewControllerType)
+    @objc func register(url: String, viewControllerType: UIViewController.Type) {
+        Router.shared.register(pattern: Router.Name(url: url), storedVC: .type(viewControllerType))
+    }
+    
+    @objc func register(url: String, viewControllerType: UIViewController.Type, constructor: @escaping () -> UIViewController) {
+        Router.shared.register(pattern: Router.Name(url: url), storedVC: .constructor(constructor, viewControllerType))
     }
     
     @objc func unregister(url: String, removeGrandchild: Bool = false) {
@@ -21,10 +25,6 @@ import Foundation
     
     @objc public func canOpen(url: String) -> Bool {
         return Router.shared.canOpen(url: url)
-    }
-    
-    @objc public func registeredViewController(for url: String) -> UIViewController.Type? {
-        return Router.shared.registeredViewController(for: Router.Name(url: url))
     }
     
     @objc func back(_ useTopMost: Bool, animated: Bool) {

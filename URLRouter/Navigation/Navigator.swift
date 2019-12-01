@@ -37,7 +37,7 @@ public extension Navigator {
     }
     
     func instantiateViewController(_ context: RoutingContext) -> UIViewController? {
-        guard let viewController = context.viewControllerType?.init() else { return nil }
+        guard let viewController = context.storedVC?.viewController else { return nil }
         viewController.routable?.parameters = context.params
         if context.option.contains(.wrapInNavigation), !context.option.contains(.push) {
             let navi = wrapperType.init(rootViewController: viewController)
