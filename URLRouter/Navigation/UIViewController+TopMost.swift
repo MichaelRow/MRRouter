@@ -45,7 +45,16 @@ public extension UIViewController {
         repeat {
             if let currentNaviController = currentVC as? UINavigationController {
                 return currentNaviController
+                
             } else if let naviController = currentVC?.navigationController {
+                return naviController
+                
+            } else if let tabBarController = currentVC as? UITabBarController,
+                      let navi = tabBarController.selectedViewController as? UINavigationController {
+                return navi
+                
+            } else if let pageViewController = currentVC as? UIPageViewController,
+                      let naviController = pageViewController.viewControllers?.first as? UINavigationController {
                 return naviController
             }
             
