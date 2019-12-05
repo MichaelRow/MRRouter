@@ -31,11 +31,11 @@ extension URLPathElement: RawRepresentable {
     public var rawValue: RawValue {
         switch self {
         case .scheme(let component):
-            return "\(component)://"
+            return "\(component.lowercased())://"
         case .path(let component):
-            return component
+            return component.lowercased()
         case .placeholder(let component):
-            return "<\(component)>"
+            return "<\(component.lowercased())>"
         }
     }
     
@@ -59,15 +59,19 @@ extension URLPathElement: Equatable {
     public static func == (lhs: URLPathElement, rhs: URLPathElement) -> Bool {
         switch (lhs, rhs) {
         case let (.scheme(leftValue), .scheme(rightValue)):
-            return leftValue == rightValue
+            return leftValue.lowercased() == rightValue.lowercased()
         case let (.path(leftValue), .path(rightValue)):
-            return leftValue == rightValue
+            return leftValue.lowercased() == rightValue.lowercased()
         case let (.placeholder(leftValue), .placeholder(rightValue)):
-            return leftValue == rightValue
+            return leftValue.lowercased() == rightValue.lowercased()
         default:
             return false
         }
     }
 }
 
-extension URLPathElement: Hashable {}
+extension URLPathElement: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(rawValue)
+    }
+}
