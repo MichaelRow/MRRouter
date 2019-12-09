@@ -41,10 +41,16 @@ class PresentAction {
             return
         }
         
-        if context.option.contains(.fullScreenModal) {
-            newVC.modalPresentationStyle = .fullScreen
+        if context.option.contains(.automaticModal) {
+            if #available(iOS 13.0, *) {
+                newVC.modalPresentationStyle = .automatic
+            } else {
+                newVC.modalPresentationStyle = .fullScreen
+            }
         } else if context.option.contains(.customModal) {
             newVC.modalPresentationStyle = .custom
+        } else {
+            newVC.modalPresentationStyle = .fullScreen
         }
         
         viewController.topMost?.present(newVC, animated: !context.option.contains(.withoutAnimation)) {
