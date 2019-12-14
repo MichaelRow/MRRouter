@@ -18,26 +18,40 @@ public enum TabBarOpenType {
 
 public extension Router {
     
+    struct Name: RawRepresentable {
+        
+        public typealias RawValue = String
+        
+        public var rawValue: RawValue
+        
+        public init(rawValue: RawValue) {
+            self.rawValue = rawValue
+        }
+        
+        public init(url: URLConvertible) {
+            self.rawValue = url.urlStringValue
+        }
+    }
+}
+
+public extension Router {
+    
     /// 注册路由
     /// - Parameter pattern: URL地址
-    /// - Parameter viewControllerType: 符合RoutableViewController的VC
     /// - Parameter routing: URL参数解析与重定向路径
     /// - Parameter tabBarIndex: 需要打开的tabBar位置
     /// - Parameter override: 是否覆盖
-    // TODO: - 暂时去掉限制, 因为旧工程OC存在问题 (todo xiaofengmin)
-
-//    func register(pattern: URLConvertible, viewControllerType: (UIViewController & RoutableViewController).Type, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
-    func register(pattern: URLConvertible, viewControllerType: UIViewController.Type, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
+    func register(_ pattern: Name, storedVC: StoredVC, routing: URLRouting? = nil, tabBarIndex: Int? = nil, override: Bool = true) {
         var usedRouting = routing ?? wildcardRouting
         if usedRouting.nestRouter !== self {
             usedRouting.nestRouter = self
         }
         
-        guard let patternComponents = pattern.pathElement else { return }
+        guard let patternComponents = pattern.rawValue.pathElement else { return }
         var currentNode = rootNode
         patternComponents.enumerated().forEach { (offset: Int, component: URLPathElement) in
             if offset == patternComponents.count - 1 {
-                currentNode.add(child: component, viewControllerType: viewControllerType, routing: usedRouting, tabBarIndex: tabBarIndex, override: override)
+                currentNode.add(child: component, storedVC: storedVC, routing: usedRouting, tabBarIndex: tabBarIndex, override: override)
             } else {
                 currentNode.add(child: component, override: false)
                 currentNode = currentNode[component]!
@@ -47,8 +61,8 @@ public extension Router {
     
     /// 注销注册表中的URL
     /// - Parameter removeGrandchild: 是否移除该节点之后的所有子节点
-    func unregister(pattern: URLConvertible, removeGrandchild: Bool = false) {
-        guard let matchedResult = matcher.match(pattern: pattern, with: rootNode) else { return }
+    func unregister(_ pattern: Name, removeGrandchild: Bool = false) {
+        guard let matchedResult = matcher.match(pattern: pattern.rawValue, with: rootNode) else { return }
         matchedResult.matchedNode.parentNode?.remove(child: matchedResult.matchedNode.nodePattern, removeGrandchild: removeGrandchild)
     }
     
@@ -57,21 +71,27 @@ public extension Router {
         return matcher.match(pattern: url, with: rootNode)?.matchedNode.routing != nil
     }
     
-    /// 获得注册在Router中的VC类型
-    func registeredViewController(for url: URLConvertible) -> UIViewController.Type? {
-        return matcher.match(pattern: url, with: rootNode)?.matchedNode.viewControllerType
+    /// 是否有注册当前URL
+    func canOpen(_ pattern: Name) -> Bool {
+        return canOpen(url: pattern.rawValue)
+    }
+    
+    /// 获得注册在Router中的VC类型。如果是.constructor方式注册，则返回nil。
+    func registeredVCType(for pattern: Name) -> UIViewController.Type? {
+        guard let storedVC = matcher.match(pattern: pattern.rawValue, with: rootNode)?.matchedNode.storedVC else { return nil }
+        switch storedVC {
+        case .type(let type):
+            return type
+        case .constructor(_, _):
+            return nil
+        }
     }
     
     /// 根据指定的URL初始化在注册表中的VC
     /// - Parameter url: URL
     /// - Parameter params: 初始化参数
-    func instantiatedViewController(for url: URLConvertible, params: [String : Any]? = nil) -> UIViewController? {
-        guard let type = matcher.match(pattern: url, with: rootNode)?.matchedNode.viewControllerType else { return nil }
-        let viewController = type.init()
-        if let params = params {
-            viewController.routable?.parameters = params
-        }
-        return viewController
+    func instantiatedViewController(for pattern: Name, params: [String : Any]? = nil) -> UIViewController? {
+        return matcher.match(pattern: pattern.rawValue, with: rootNode)?.matchedNode.storedVC?.viewController
     }
     
     func back(_ useTopMost: Bool = true, animated: Bool = true) {
@@ -86,20 +106,22 @@ public extension Router {
         navigator.dismiss(animated: animated, completion: completion)
     }
     
-    func push(url: URLConvertible, parameters: [String : Any]? = nil, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
+    //MARK: - 注册VC
+    
+    func push(_ pattern: Name, parameters: [String : Any]? = nil, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
         let opt = option.union(.push).subtracting(.present)
-        open(url: url, parameters: parameters, option: opt, tabBarOpenType: tabBarOpenType, completion: completion)
+        open(pattern, parameters: parameters, option: opt, tabBarOpenType: tabBarOpenType, completion: completion)
     }
     
-    func present(url: URLConvertible, parameters: [String : Any]? = nil, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
+    func present(_ pattern: Name, parameters: [String : Any]? = nil, option: RoutingOption = [], completion: RouterCompletion? = nil) {
         let opt = option.union(.present).subtracting(.push)
-        open(url: url, parameters: parameters, option: opt, tabBarOpenType: tabBarOpenType, completion: completion)
+        open(pattern, parameters: parameters, option: opt, tabBarOpenType: .preset, completion: completion)
     }
     
-    func open(url: URLConvertible, parameters: [String : Any]? = nil, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
-        let result = matcher.match(pattern: url, with: rootNode)
+    func open(_ pattern: Name, parameters: [String : Any]? = nil, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
+        let result = matcher.match(pattern: pattern.rawValue, with: rootNode)
         
-        let context = RoutingContext(originalURL: url, params: parameters, placeholders: result?.placeholders, viewControllerType: result?.matchedNode.viewControllerType, completion: completion)
+        let context = RoutingContext(originalURL: pattern.rawValue, params: parameters, placeholders: result?.placeholders, storedVC: result?.matchedNode.storedVC, completion: completion)
         context.option = option
         
         switch tabBarOpenType {
@@ -122,5 +144,24 @@ public extension Router {
         } else {
             completion?(.noRouting)
         }
+    }
+    
+    //MARK: - 未注册VC
+    
+    func push(_ viewController: UIViewController, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
+        let opt = option.union(.push).subtracting(.present)
+        let toIndex: Int?
+        switch tabBarOpenType {
+        case .current, .preset:
+            toIndex = nil
+        case .custom(let index):
+            toIndex = index
+        }
+        navigator.push(viewController, option: opt, toTabBarIndex: toIndex, completion: completion)
+    }
+    
+    func present(_ viewController: UIViewController, option: RoutingOption = [], completion: RouterCompletion? = nil) {
+        let opt = option.union(.present).subtracting(.push)
+        navigator.present(viewController, option: opt, completion: completion)
     }
 }

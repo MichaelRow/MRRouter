@@ -15,17 +15,16 @@ class TitleViewController: UIViewController, RoutableViewController {
     
     class var stackLevel: StackLevel { return .lowest }
     
+    @IBOutlet weak var textView: UITextView?
+    @IBOutlet weak var label: UILabel?
+    
     init() {
         super.init(nibName: "TitleViewController", bundle: nil)
     }
-    
-    required init(_ parameters: [String : Any]) {
-        super.init(nibName: "TitleViewController", bundle: nil)
-        self.parameters = parameters
+
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
-        
-    @IBOutlet weak var textView: UITextView?
-    @IBOutlet weak var label: UILabel?
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)

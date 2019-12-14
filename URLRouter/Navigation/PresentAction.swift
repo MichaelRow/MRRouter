@@ -8,24 +8,33 @@
 protocol PresentActionDelegate: class {
     
     func presentAction(_ action: PresentAction, instantiatedViewControllerFor context: RoutingContext) -> UIViewController?
-    func presentAction(_ action: PresentAction, willPresent context: RoutingContext)
-    func presentAction(_ action: PresentAction, didPresent context: RoutingContext)
-    func presentAction(_ action: PresentAction, context: RoutingContext, failPresent error: RouterError)
+    
+    /// 即将模态弹出
+    /// - Parameter context: 上下文。nil时为处理非注册VC跳转
+    func presentAction(_ action: PresentAction, willPresent context: RoutingContext?)
+    
+    /// 完成模态弹出
+    /// - Parameter context: 上下文。nil时为处理非注册VC跳转
+    func presentAction(_ action: PresentAction, didPresent context: RoutingContext?)
+    
+    /// 模态弹出失败
+    /// - Parameter context: 上下文。nil时为处理非注册VC跳转
+    func presentAction(_ action: PresentAction, context: RoutingContext?, failPresent error: RouterError)
 }
 
 class PresentAction {
     
     weak var delegate: PresentActionDelegate?
     
-    func present(on viewController: UIViewController?, context: RoutingContext) {
+    func present(on presenting: UIViewController?, context: RoutingContext) {
         
-        guard let viewController = viewController else {
+        guard let presenting = presenting else {
             delegate?.presentAction(self, context: context, failPresent: .noVCInStack)
             return
         }
         
-        if let viewControllerType = context.viewControllerType,
-           let canNavigate = viewController.topMost?.navigatable?.viewControllerCanNavigate?(with: context.params, viewControllerType: viewControllerType),
+        if let storedVC = context.storedVC,
+           let canNavigate = presenting.topMost?.navigatable?.viewControllerCanNavigate?(with: context.params, viewControllerType: storedVC.viewControllerType),
            !canNavigate {
             delegate?.presentAction(self, context: context, failPresent: .rejectNavigate)
             return
@@ -33,30 +42,66 @@ class PresentAction {
         
         delegate?.presentAction(self, willPresent: context)
         
-        ModalAction.dismissModalIfNeeded(for: viewController, context: context)
-        
-        guard let newVC = delegate?.presentAction(self, instantiatedViewControllerFor: context)
-        else {
-            delegate?.presentAction(self, context: context, failPresent: .instantiateVCFailed)
-            return
-        }
-        
-        if context.option.contains(.automaticModal) {
-            if #available(iOS 13.0, *) {
-                newVC.modalPresentationStyle = .automatic
+        ModalAction.dismissModalIfNeeded(for: presenting, context: context) {
+            guard let newVC = self.delegate?.presentAction(self, instantiatedViewControllerFor: context)
+            else {
+                self.delegate?.presentAction(self, context: context, failPresent: .instantiateVCFailed)
+                return
+            }
+            
+            if context.option.contains(.automaticModal) {
+                if #available(iOS 13.0, *) {
+                    newVC.modalPresentationStyle = .automatic
+                } else {
+                    newVC.modalPresentationStyle = .fullScreen
+                }
+            } else if context.option.contains(.customModal) {
+                newVC.modalPresentationStyle = .custom
             } else {
                 newVC.modalPresentationStyle = .fullScreen
             }
-        } else if context.option.contains(.customModal) {
-            newVC.modalPresentationStyle = .custom
-        } else {
-            newVC.modalPresentationStyle = .fullScreen
-        }
-        
-        viewController.topMost?.present(newVC, animated: !context.option.contains(.withoutAnimation)) {
-            context.completion?(nil)
-            self.delegate?.presentAction(self, didPresent: context)
+            
+            presenting.topMost?.present(newVC, animated: !context.option.contains(.withoutAnimation)) {
+                context.completion?(nil)
+                self.delegate?.presentAction(self, didPresent: context)
+            }
         }
     }
     
+    func present(viewController: UIViewController, on presenting: UIViewController?, option: RoutingOption, completion: RouterCompletion?) {
+        
+        guard let presenting = presenting else {
+            completion?(.noVCInStack)
+            delegate?.presentAction(self, context: nil, failPresent: .noVCInStack)
+            return
+        }
+        
+        if let canNavigate = presenting.topMost?.navigatable?.viewControllerCanNavigate?(with: [:], viewControllerType: type(of: viewController)),
+           !canNavigate {
+            completion?(.rejectNavigate)
+            delegate?.presentAction(self, context: nil, failPresent: .rejectNavigate)
+            return
+        }
+        
+        if option.contains(.automaticModal) {
+            if #available(iOS 13.0, *) {
+                viewController.modalPresentationStyle = .automatic
+            } else {
+                viewController.modalPresentationStyle = .fullScreen
+            }
+        } else if option.contains(.customModal) {
+            viewController.modalPresentationStyle = .custom
+        } else {
+            viewController.modalPresentationStyle = .fullScreen
+        }
+        
+        delegate?.presentAction(self, willPresent: nil)
+        
+        ModalAction.dismissModalIfNeeded(for: presenting, option: option) {
+            presenting.topMost?.present(viewController, animated: !option.contains(.withoutAnimation)) {
+                completion?(nil)
+                self.delegate?.presentAction(self, didPresent: nil)
+            }
+        }
+    }
 }

@@ -8,32 +8,64 @@
 protocol PushActionDelegate: class {
     
     func pushAction(_ action: PushAction, instantiatedViewControllerFor context: RoutingContext) -> UIViewController?
-    func pushAction(_ action: PushAction, willPush context: RoutingContext, stackType: StackType)
-    func pushAction(_ action: PushAction, didPush context: RoutingContext, stackType: StackType)
-    func pushAction(_ action: PushAction, context: RoutingContext, failPresent error: RouterError)
+    
+    /// 即将push压栈
+    /// - Parameter context: 上下文。nil时为处理非注册VC跳转
+    func pushAction(_ action: PushAction, willPush context: RoutingContext?, stackType: StackType)
+    
+    /// 完成push压栈
+    /// - Parameter context: 上下文。nil时为处理非注册VC跳转
+    func pushAction(_ action: PushAction, didPush context: RoutingContext?, stackType: StackType)
+
+    /// push压栈失败
+    /// - Parameter context: 上下文。nil时为处理非注册VC跳转
+    func pushAction(_ action: PushAction, context: RoutingContext?, failPresent error: RouterError)
 }
 
 class PushAction {
     
     weak var delegate: PushActionDelegate?
     
-    func push(on navigator: UINavigationController?, context: RoutingContext) {
-
-        guard let navigator = navigator else {
-            delegate?.pushAction(self, context: context, failPresent: .noNavigationController)
+    public func push(_ viewController: UIViewController, on navigation: UINavigationController, option: RoutingOption, completion: RouterCompletion?) {
+        if let canNavigate = navigation.topMost?.navigatable?.viewControllerCanNavigate?(with: [:], viewControllerType: type(of: viewController)),
+           !canNavigate {
+            completion?(.rejectNavigate)
+            delegate?.pushAction(self, context: nil, failPresent: .rejectNavigate)
             return
         }
         
-        if let viewControllerType = context.viewControllerType,
-           let canNavigate = navigator.topMost?.navigatable?.viewControllerCanNavigate?(with: context.params, viewControllerType: viewControllerType),
+        ModalAction.dismissModalIfNeeded(for: navigation, option: option) {
+            // 先找到合适的导航栏控制器
+            guard let navigationController = option.contains(.useStackNavigation) ? navigation : navigation.topMostNavigation
+            else {
+                completion?(.noNavigationController)
+                self.delegate?.pushAction(self, context: nil, failPresent: .noNavigationController)
+                return
+            }
+            
+            ModalAction.dismissModal(for: navigationController, animated: !option.contains(.withoutDismissalAnimation)) {
+                self.delegate?.pushAction(self, willPush: nil, stackType: .push)
+                navigationController.pushViewController(viewController, animated: !option.contains(.withoutAnimation))
+                self.delegate?.pushAction(self, didPush: nil, stackType: .push)
+                completion?(nil)
+            }
+        }
+    }
+    
+    func push(on navigation: UINavigationController, context: RoutingContext) {
+        guard let storedVC = context.storedVC else {
+            delegate?.pushAction(self, context: context, failPresent: .instantiateVCFailed)
+            return
+        }
+        if let canNavigate = navigation.topMost?.navigatable?.viewControllerCanNavigate?(with: context.params, viewControllerType: storedVC.viewControllerType),
            !canNavigate {
             delegate?.pushAction(self, context: context, failPresent: .rejectNavigate)
             return
         }
         
-        ModalAction.dismissModalIfNeeded(for: navigator, context: context) {
+        ModalAction.dismissModalIfNeeded(for: navigation, context: context) {
             // 先找到合适的导航栏控制器
-            guard let navigationController = context.option.contains(.useStackNavigation) ? navigator : navigator.topMostNavigation
+            guard let navigationController = context.option.contains(.useStackNavigation) ? navigation : navigation.topMostNavigation
             else {
                 self.delegate?.pushAction(self, context: context, failPresent: .noNavigationController)
                 return
@@ -143,7 +175,7 @@ class PushAction {
         
         let lastVCType = type(of: lastVC)
         // 无法比较栈等级的情况直接压栈
-        guard let newVCLevel = context.viewControllerType?.routable?.stackLevel,
+        guard let newVCLevel = context.storedVC?.viewControllerType.routable?.stackLevel,
               let lastVCLevel = lastVCType.routable?.stackLevel
         else {
             return (.push, nil)
@@ -156,7 +188,7 @@ class PushAction {
             stackType = .push
         } else if newVCLevel == lastVCLevel {
             //如果是同样的VC，只替换VC参数
-            if context.viewControllerType == lastVCType {
+            if context.storedVC?.viewControllerType == lastVCType {
                 stackType = .refreshParameters
             } else {
                 stackType = .replace
@@ -184,7 +216,7 @@ class PushAction {
                     break
                 } else if newVCLevel == currentLevel {
                     //如果是同样的VC，只替换VC参数
-                    if context.viewControllerType == currentVCType {
+                    if context.storedVC?.viewControllerType == currentVCType {
                         stackType = .popThenRefreshParameters
                     } else {
                         stackType = .popThenReplace

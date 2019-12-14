@@ -28,10 +28,27 @@ public protocol Navigator: class {
     func present(context: RoutingContext)
     
     func push(context: RoutingContext)
+        
+    func push(_ viewController: UIViewController, option: RoutingOption, toTabBarIndex: Int?, completion: RouterCompletion?)
+    
+    func present(_ viewController: UIViewController, option: RoutingOption, completion: RouterCompletion?)
 }
 
 public extension Navigator {
+    
     var window: UIWindow? {
         nestWindow ?? UIApplication.shared.keyWindow
+    }
+    
+    func instantiateViewController(_ context: RoutingContext) -> UIViewController? {
+        guard let viewController = context.storedVC?.viewController else { return nil }
+        viewController.routable?.parameters = context.params
+        if context.option.contains(.wrapInNavigation), !context.option.contains(.push) {
+            let navi = wrapperType.init(rootViewController: viewController)
+            navi.navigationBar.isTranslucent = false
+            return navi
+        } else {
+            return viewController
+        }
     }
 }
