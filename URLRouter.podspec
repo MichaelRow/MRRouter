@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'URLRouter'
-  s.version          = '0.1.5'
+  s.version          = '0.1.6'
   s.summary          = 'A swifty router.'
 
 # This description is used to generate tags and improve search results.
@@ -31,7 +31,7 @@ TODO: Add long description of the pod here.
   s.ios.deployment_target = '9.0'
   s.swift_versions = '5.0'
   s.source_files = 'URLRouter/**/*'
-  s.dependency 'StormUtil'
+  s.dependency 'Define'
   s.dependency 'Protocol'
   
   # s.resource_bundles = {

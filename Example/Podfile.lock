@@ -1,26 +1,26 @@
 PODS:
+  - Define (0.1.1)
   - Protocol (0.1.0)
-  - StormUtil (0.1.0)
-  - URLRouter (0.1.4):
+  - URLRouter (0.1.6):
+    - Define
     - Protocol
-    - StormUtil
 
 DEPENDENCIES:
   - URLRouter (from `../`)
 
 SPEC REPOS:
   "git@code.aliyun.com:szfy_ios/SZFYSpecs.git":
+    - Define
     - Protocol
-    - StormUtil
 
 EXTERNAL SOURCES:
   URLRouter:
     :path: "../"
 
 SPEC CHECKSUMS:
+  Define: 54ce46f0359af34f74a06f111359ccd4e872f01c
   Protocol: 948ae4bc66a6822c0ab47d94b801ad09c87a3243
-  StormUtil: 3cf185936defef673ba3f42e2c15c2aa214a2dfa
-  URLRouter: fdffccab5053e5d3757c111ccc53ea6f872fba47
+  URLRouter: d02b5c0f8042604bfac76f88d0d3878d408505ca
 
 PODFILE CHECKSUM: cf8139ef948f7a50dd08950de5165323ab4d7b2c
 
