@@ -150,7 +150,7 @@ public extension Router {
     
     //MARK: - 未注册VC
     
-    func push(_ viewController: UIViewController, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
+    func push(viewController: UIViewController, option: RoutingOption = [], tabBarOpenType: TabBarOpenType = .preset, completion: RouterCompletion? = nil) {
         let opt = option.union(.push).subtracting(.present)
         let toIndex: Int?
         switch tabBarOpenType {
@@ -162,7 +162,7 @@ public extension Router {
         navigator.push(viewController, option: opt, toTabBarIndex: toIndex, completion: completion)
     }
     
-    func present(_ viewController: UIViewController, option: RoutingOption = [], completion: RouterCompletion? = nil) {
+    func present(viewController: UIViewController, option: RoutingOption = [], completion: RouterCompletion? = nil) {
         let opt = option.union(.present).subtracting(.push)
         navigator.present(viewController, option: opt, completion: completion)
     }
