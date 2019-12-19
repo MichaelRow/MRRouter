@@ -105,7 +105,7 @@ public extension Router {
     }
     
     func dismissLast(animated: Bool = true, completion: RouterCompletion? = nil) {
-        navigator.dismiss(animated: animated, completion: completion)
+        navigator.dismissLast(animated: animated, completion: completion)
     }
     
     //MARK: - 注册VC

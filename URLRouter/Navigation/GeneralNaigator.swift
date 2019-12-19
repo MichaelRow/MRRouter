@@ -11,7 +11,16 @@ open class GeneralNaigator: Navigator {
         
     public weak var navigatorDelegate: NavigatorDelegate?
     
-    public weak var nestWindow: UIWindow?
+    private weak var _nestWindow: UIWindow?
+    
+    public var nestWindow: UIWindow? {
+        get {
+            _nestWindow ?? UIApplication.shared.keyWindow
+        }
+        set {
+            _nestWindow = newValue
+        }
+    }
         
     public var wrapperType: UINavigationController.Type
         
@@ -20,7 +29,7 @@ open class GeneralNaigator: Navigator {
     private var presentAction: PresentAction
         
     public init(_ nestWindow: UIWindow? = nil, wrapperType: UINavigationController.Type = UINavigationController.self) {
-        self.nestWindow = nestWindow
+        _nestWindow = nestWindow
         self.wrapperType = wrapperType
         
         pushAction = PushAction()
@@ -31,11 +40,11 @@ open class GeneralNaigator: Navigator {
     }
     
     public func back(_ useTopMost: Bool = true, animated: Bool = true) {
-        BackAction.back(on: window?.rootViewController, useTopMost: useTopMost, animated: animated)
+        BackAction.back(on: nestWindow?.rootViewController, useTopMost: useTopMost, animated: animated)
     }
     
     public func dismiss(animated: Bool = true, completion: RouterCompletion? = nil) {
-        guard let rootVC = window?.rootViewController else {
+        guard let rootVC = nestWindow?.rootViewController else {
             completion?(.getTopMostVCFailed)
             return
         }
@@ -45,7 +54,7 @@ open class GeneralNaigator: Navigator {
     }
     
     public func dismissLast(animated: Bool = true, completion: RouterCompletion? = nil) {
-        guard let topMost = window?.rootViewController?.topMost else {
+        guard let topMost = nestWindow?.rootViewController?.topMost else {
             completion?(.getTopMostVCFailed)
             return
         }
@@ -71,11 +80,11 @@ open class GeneralNaigator: Navigator {
     }
     
     public func present(context: RoutingContext) {
-        presentAction.present(on: window?.rootViewController, context: context)
+        presentAction.present(on: nestWindow?.rootViewController, context: context)
     }
     
     public func present(_ viewController: UIViewController, option: RoutingOption, completion: RouterCompletion?) {
-        presentAction.present(viewController: viewController, on: window?.rootViewController, option: option, completion: completion)
+        presentAction.present(viewController: viewController, on: nestWindow?.rootViewController, option: option, completion: completion)
     }
     
     //MARK: - Push
@@ -105,7 +114,7 @@ open class GeneralNaigator: Navigator {
     }
     
     private func navigationControllerForPush(toTabBarIndex: Int?, option: RoutingOption, completion: @escaping (Result<UINavigationController, RouterError>) -> Void) {
-        guard let rootVC = window?.rootViewController else {
+        guard let rootVC = nestWindow?.rootViewController else {
             completion(.failure(.getTopMostVCFailed))
             return
         }

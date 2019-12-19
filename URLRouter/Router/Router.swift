@@ -34,19 +34,19 @@ open class Router {
     }
     
     public var topMost: UIViewController? {
-        return navigator.window?.rootViewController?.topMost
+        return navigator.nestWindow?.rootViewController?.topMost
     }
     
     public var navigationController: UINavigationController? {
-        return navigator.window?.rootViewController?.topMost?.navigation
+        return navigator.nestWindow?.rootViewController?.topMost?.navigation
     }
     
     public var topMostNavigationController: UINavigationController? {
-        return navigator.window?.rootViewController?.topMost?.topMostNavigation
+        return navigator.nestWindow?.rootViewController?.topMost?.topMostNavigation
     }
     
     public var tabBarController: UITabBarController? {
-        return navigator.window?.rootViewController as? UITabBarController
+        return navigator.nestWindow?.rootViewController as? UITabBarController
     }
 }
 

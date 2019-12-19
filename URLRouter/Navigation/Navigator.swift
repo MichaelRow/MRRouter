@@ -36,10 +36,6 @@ public protocol Navigator: class {
 
 public extension Navigator {
     
-    var window: UIWindow? {
-        nestWindow ?? UIApplication.shared.keyWindow
-    }
-    
     func instantiateViewController(_ context: RoutingContext) -> UIViewController? {
         guard let viewController = context.storedVC?.viewController else { return nil }
         viewController.routable?.parameters = context.params
