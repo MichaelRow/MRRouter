@@ -23,10 +23,12 @@ public struct RoutingOption: OptionSet {
     public static let ignoreLevel = RoutingOption(rawValue: 1 << 5)
     /// 页面出栈和替换有动画
     public static let popReplaceAnimation = RoutingOption(rawValue: 1 << 6)
+    /// push下在跳转完成后删除执行push的VC
+    public static let deleteVCWhenPushComplete = RoutingOption(rawValue: 1 << 7)
     /// 卡片模态与自定义模态互斥
-    public static let automaticModal = RoutingOption(rawValue: 1 << 7)
+    public static let automaticModal = RoutingOption(rawValue: 1 << 8)
     /// 自定义模态与卡片模态互斥
-    public static let customModal = RoutingOption(rawValue: 1 << 8)
+    public static let customModal = RoutingOption(rawValue: 1 << 9)
     
     /// 压栈跳转，与present互斥
     public static let push = RoutingOption(rawValue: 1 << 10)

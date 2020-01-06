@@ -45,7 +45,14 @@ class PushAction {
             
             ModalAction.dismissModal(for: navigationController, animated: !option.contains(.withoutDismissalAnimation)) {
                 self.delegate?.pushAction(self, willPush: nil, stackType: .push)
-                navigationController.pushViewController(viewController, animated: !option.contains(.withoutAnimation))
+                if option.contains(.deleteVCWhenPushComplete) {
+                    var VCs = navigationController.viewControllers
+                    VCs.removeLast()
+                    VCs.append(viewController)
+                    navigationController.setViewControllers(VCs, animated: !option.contains(.withoutAnimation))
+                } else {
+                    navigationController.pushViewController(viewController, animated: !option.contains(.withoutAnimation))
+                }
                 self.delegate?.pushAction(self, didPush: nil, stackType: .push)
                 completion?(nil)
             }
@@ -108,7 +115,14 @@ class PushAction {
     
     @discardableResult private func handlePush(_ context: RoutingContext, navigationController: UINavigationController) -> RouterError? {
         guard let viewController = delegate?.pushAction(self, instantiatedViewControllerFor: context) else { return .instantiateVCFailed }
-        navigationController.pushViewController(viewController, animated: !context.option.contains(.withoutAnimation))
+        if context.option.contains(.deleteVCWhenPushComplete) {
+            var VCs = navigationController.viewControllers
+            VCs.removeLast()
+            VCs.append(viewController)
+            navigationController.setViewControllers(VCs, animated: !context.option.contains(.withoutAnimation))
+        } else {
+            navigationController.pushViewController(viewController, animated: !context.option.contains(.withoutAnimation))
+        }
         return nil
     }
     

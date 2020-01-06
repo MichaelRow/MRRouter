@@ -164,6 +164,12 @@ public extension Router {
     
     func present(viewController: UIViewController, option: RoutingOption = [], completion: RouterCompletion? = nil) {
         let opt = option.union(.present).subtracting(.push)
-        navigator.present(viewController, option: opt, completion: completion)
+        if option.contains(.wrapInNavigation) {
+            let navi = self.wrapperType.init(rootViewController: viewController)
+            navi.navigationBar.isTranslucent = false
+            navigator.present(navi, option: opt, completion: completion)
+        } else {
+            navigator.present(viewController, option: opt, completion: completion)
+        }
     }
 }
