@@ -91,7 +91,7 @@ public extension Router {
     /// - Parameter url: URL
     /// - Parameter params: 初始化参数
     func instantiatedViewController(for pattern: Name, params: [String : Any]? = nil) -> UIViewController? {
-        let vc = matcher.match(pattern: pattern.rawValue, with: rootNode)?.matchedNode.storedVC?.viewController
+        let vc = matcher.match(pattern: pattern.rawValue, with: rootNode)?.matchedNode.storedVC?.instantiatedViewController(for: params)
         vc?.routable?.parameters = params ?? [:]
         return vc
     }

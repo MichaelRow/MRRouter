@@ -15,7 +15,7 @@ import Foundation
         Router.shared.register(Router.Name(url: url), storedVC: .type(viewControllerType))
     }
     
-    @objc func register(url: String, viewControllerType: UIViewController.Type, constructor: @escaping () -> UIViewController) {
+    @objc func register(url: String, viewControllerType: UIViewController.Type, constructor: @escaping ([String : Any]?) -> UIViewController) {
         Router.shared.register(Router.Name(url: url), storedVC: .constructor(constructor, viewControllerType))
     }
     

@@ -11,7 +11,7 @@ public enum StoredVC {
     /// 使用closure构造VC，并提供准确的VC类型。
     ///
     /// 在constructor初始化VC后会进行校验，crash if not match.
-    case constructor(_ constructor: () -> UIViewController, _ type: UIViewController.Type)
+    case constructor(_ constructor: (_ params: [String : Any]?) -> UIViewController, _ type: UIViewController.Type)
     
     var stackLevel: StackLevel? {
         switch self {
@@ -22,12 +22,12 @@ public enum StoredVC {
         }
     }
     
-    var viewController: UIViewController {
+    func instantiatedViewController(for params: [String : Any]? = nil) -> UIViewController {
         switch self {
         case .type(let type):
             return type.init()
         case .constructor(let constructor, let type):
-            let VC = constructor()
+            let VC = constructor(params)
             guard Swift.type(of: VC) == type else {
                 fatalError(".constructor(_,_)创建的VC类型不匹配")
             }

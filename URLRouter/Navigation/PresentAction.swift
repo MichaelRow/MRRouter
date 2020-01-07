@@ -60,6 +60,7 @@ class PresentAction {
             } else {
                 newVC.modalPresentationStyle = .fullScreen
             }
+            newVC.modalPresentationCapturesStatusBarAppearance = true
             
             presenting.topMost?.present(newVC, animated: !context.option.contains(.withoutAnimation)) {
                 context.completion?(nil)
@@ -94,6 +95,7 @@ class PresentAction {
         } else {
             viewController.modalPresentationStyle = .fullScreen
         }
+        viewController.modalPresentationCapturesStatusBarAppearance = true
         
         delegate?.presentAction(self, willPresent: nil)
         
