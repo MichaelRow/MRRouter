@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'URLRouter'
-  s.version          = '0.1.9'
+  s.version          = '0.1.10'
   s.summary          = 'A swifty router.'
 
 # This description is used to generate tags and improve search results.
@@ -25,14 +25,12 @@ TODO: Add long description of the pod here.
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'MichaelRow' => 'little93@me.com' }
-  s.source           = { :git => 'https://code.aliyun.com/szfy_ios/urlrouter.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/MichaelRow/URLRouter.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '9.0'
   s.swift_versions = '5.0'
   s.source_files = 'URLRouter/**/*'
-  s.dependency 'Define'
-  s.dependency 'Protocol'
   
   # s.resource_bundles = {
   #   'URLRouter' => ['URLRouter/Assets/*.png']

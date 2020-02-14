@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Protocol
 
 public extension UIViewController {
     

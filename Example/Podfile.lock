@@ -1,26 +1,15 @@
 PODS:
-  - Define (0.1.1)
-  - Protocol (0.1.0)
-  - URLRouter (0.1.7):
-    - Define
-    - Protocol
+  - URLRouter (0.1.9)
 
 DEPENDENCIES:
   - URLRouter (from `../`)
-
-SPEC REPOS:
-  "git@code.aliyun.com:szfy_ios/SZFYSpecs.git":
-    - Define
-    - Protocol
 
 EXTERNAL SOURCES:
   URLRouter:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Define: 54ce46f0359af34f74a06f111359ccd4e872f01c
-  Protocol: 948ae4bc66a6822c0ab47d94b801ad09c87a3243
-  URLRouter: fae5843b8b6d73cc8ba0e0d1400e353490e6ef6d
+  URLRouter: ed93ecba8ee38735dd82f60da3aa12457b60a506
 
 PODFILE CHECKSUM: cf8139ef948f7a50dd08950de5165323ab4d7b2c
 

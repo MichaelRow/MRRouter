@@ -4,7 +4,6 @@
 //
 //  Created by Michael Row on 2019/9/8.
 //
-@_exported import Define
 
 public protocol URLParameterHandler: CustomStringConvertible {
     
